@@ -1,0 +1,8 @@
+{
+  "servers": [
+    {
+      "url": "https://mcp.github.com",
+      "tools": ["repo", "file", "search"]
+    }
+  ]
+}
