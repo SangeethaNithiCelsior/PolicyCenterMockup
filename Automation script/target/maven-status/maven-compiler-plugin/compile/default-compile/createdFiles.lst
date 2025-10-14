@@ -1,0 +1,10 @@
+com\policymaster\automation\pages\LoginPage.class
+com\policymaster\automation\base\BaseClass.class
+com\policymaster\automation\utils\ExtentReportManager.class
+com\policymaster\automation\utils\ScreenshotUtils.class
+com\policymaster\automation\pages\DesktopPage.class
+com\policymaster\automation\listeners\TestListener.class
+com\policymaster\automation\pages\NewSubmissionsPage.class
+com\policymaster\automation\base\BasePage.class
+com\policymaster\automation\utils\DriverManager.class
+com\policymaster\automation\config\ConfigManager.class
