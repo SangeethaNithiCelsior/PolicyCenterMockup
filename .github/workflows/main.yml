@@ -26,21 +26,17 @@ jobs:
       working-directory: frontend
       run: npm ci --legacy-peer-deps
 
-    # 4. Fix permissions for react-scripts
-    - name: Fix permissions
-      run: chmod +x frontend/node_modules/.bin/react-scripts
-
-    # 5. Run tests
+    # 4. Run tests
     - name: Run tests
       working-directory: frontend
       run: npm test -- --watchAll=false
 
-    # 6. Build the app
+    # 5. Build the app
     - name: Build the app
       working-directory: frontend
       run: npm run build
 
-    # 7. Upload build artifacts
+    # 6. Upload build artifacts
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
