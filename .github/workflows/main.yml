@@ -19,23 +19,26 @@ jobs:
         node-version: '18'
 
     - name: Clean environment
-      working-directory: frontend
       run: |
+        cd frontend
         rm -rf node_modules
         rm -f package-lock.json
         npm cache clean --force
 
     - name: Install dependencies
-      working-directory: frontend
-      run: npm ci --legacy-peer-deps
+      run: |
+        cd frontend
+        npm ci --legacy-peer-deps
 
     - name: Run tests
-      working-directory: frontend
-      run: npm test -- --watchAll=false
+      run: |
+        cd frontend
+        npm test -- --watchAll=false
 
     - name: Build the app
-      working-directory: frontend
-      run: npm run build
+      run: |
+        cd frontend
+        npm run build
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
