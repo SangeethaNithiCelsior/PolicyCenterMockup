@@ -60,7 +60,6 @@
     "babel-eslint": "^10.0.1",
     "babel-extract-comments": "^1.0.0",
     "babel-jest": "^24.9.0",
-    "babel-loader": "^8.0.5",
     "babel-plugin-istanbul": "^5.2.0",
     "babel-plugin-jest-hoist": "^24.9.0",
     "babel-plugin-macros": "^2.8.0",
