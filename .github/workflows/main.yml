@@ -18,14 +18,19 @@ jobs:
       with:
         node-version: '18'
 
-    # Do NOT delete package-lock.json
-    - name: Clean node_modules and cache
+    - name: Clean environment
+      working-directory: frontend
       run: |
         rm -rf node_modules
+        rm -f package-lock.json
         npm cache clean --force
+
     - name: Install dependencies
+      working-directory: frontend
       run: npm ci --legacy-peer-deps
+
     - name: Run tests
+      working-directory: frontend
       run: npm test -- --watchAll=false
 
     - name: Build the app
@@ -37,3 +42,4 @@ jobs:
       with:
         name: production-build
         path: frontend/build
+``
