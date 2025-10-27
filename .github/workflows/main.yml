@@ -7,29 +7,40 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. Checkout code
     - name: Checkout code
       uses: actions/checkout@v3
       with:
         submodules: false
         clean: false
         fetch-depth: 1
+
+    # 2. Set up Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
 
+    # 3. Install dependencies (clean install for CI)
     - name: Install dependencies
       working-directory: frontend
-      run: npm install --legacy-peer-deps
+      run: npm ci --legacy-peer-deps
 
+    # 4. Fix permissions for react-scripts
+    - name: Fix permissions
+      run: chmod +x frontend/node_modules/.bin/react-scripts
+
+    # 5. Run tests
     - name: Run tests
       working-directory: frontend
       run: npm test -- --watchAll=false
 
+    # 6. Build the app
     - name: Build the app
       working-directory: frontend
       run: npm run build
 
+    # 7. Upload build artifacts
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
