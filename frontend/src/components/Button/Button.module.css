@@ -1,0 +1,45 @@
+/* Base button styles */
+.button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  /* Primary variant */
+  .primary {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .primary:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Secondary variant */
+  .secondary {
+    background-color: #6c757d;
+    color: #fff;
+  }
+  
+  .secondary:hover {
+    background-color: #5a6268;
+  }
+  
+  /* Danger variant */
+  .danger {
+    background-color: #dc3545;
+    color: #fff;
+  }
+  
+  .danger:hover {
+    background-color: #bd2130;
+  }
+  

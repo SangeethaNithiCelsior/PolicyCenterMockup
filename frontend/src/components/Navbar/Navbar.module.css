@@ -1,0 +1,85 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.navTabs {
+    display: flex;
+    gap: 10px;
+}
+
+.navTab {
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+    .navTab:hover {
+        background-color: #0056b3;
+    }
+
+.activeTab {
+    border-bottom: 2px solid #fff;
+    font-weight: bold;
+}
+
+/* Dropdown */
+.dropdown {
+    position: relative;
+}
+
+.dropdownContent {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%; /* Position below the button */
+    left: 0;
+    background-color: #324C76; /* Match the navbar background */
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.dropdown:hover .dropdownContent {
+    display: flex; /* Show dropdown content on hover */
+}
+
+.dropdownItem {
+    padding: 10px 15px;
+    font-size: 14px;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.3s;
+}
+
+    .dropdownItem:hover {
+        background-color: #0056b3;
+    }
+
+/* Logout Button */
+.logoutButton {
+    padding: 8px 15px;
+    font-size: 14px;
+    color: #007bff;
+    background-color: #fff;
+    border: 1px solid #007bff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    margin-left: 300px; /* Added spacing between Administration and Logout */
+}
+
+    .logoutButton:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
