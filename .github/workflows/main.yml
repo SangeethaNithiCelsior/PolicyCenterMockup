@@ -1,38 +1,62 @@
 name: build-and-test
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+      - develop
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
+    # 1. Checkout code
     - name: Checkout code
       uses: actions/checkout@v3
 
+    # 2. Set up Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
+        cache: 'npm'
 
-    - name: Clean environment
+    # 3. Cache npm for frontend
+    - name: Cache npm (frontend)
+      uses: actions/cache@v3
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-npm-
+
+    # 4. Clean environment for frontend
+    - name: Clean environment (frontend)
       working-directory: ./frontend
       run: |
         rm -rf node_modules
-        rm -f package-lock.json
         npm cache clean --force
-
-    - name: Install dependencies
+    # 5. Install dependencies for frontend
+    - name: Install dependencies (frontend)
       working-directory: ./frontend
       run: npm ci --legacy-peer-deps
-    - name: Run tests
+    # 6. If inner package exists, install its dependencies
+    - name: Install dependencies (inner package)
+      if: ${{ hashFiles('frontend/inner-package/package-lock.json') != '' }}
+      working-directory: ./frontend/inner-package
+      run: npm ci --legacy-peer-deps
+
+    # 7. Run tests for frontend
+    - name: Run tests (frontend)
       working-directory: ./frontend
       run: npm test -- --watchAll=false
-
+    # 8. Build the app
     - name: Build the app
       working-directory: ./frontend
       run: npm run build
 
+    # 9. Upload build artifacts
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
