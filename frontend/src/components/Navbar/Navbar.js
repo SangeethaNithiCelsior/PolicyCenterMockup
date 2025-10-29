@@ -1,4 +1,5 @@
-﻿import React, { useState } from 'react';
+﻿/* eslint-disable unicode-bom */
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Navbar.module.css';
 
@@ -40,7 +41,7 @@ const Navbar = ({ id, tabs, activeTab, onTabClick, onLogout }) => {
                                     className={`${styles.navTab} ${activeTab === tab ? styles.activeTab : ''}`}
                                     onClick={() => onTabClick(tab)}
                                 >
-                                    {tab} ▼ {/* Down arrow icon */}
+                                    {tab} ▼
                                 </button>
                                 {isAccountDropdownVisible && (
                                     <div id="account-dropdown" className={styles.dropdownContent}>
@@ -69,7 +70,7 @@ const Navbar = ({ id, tabs, activeTab, onTabClick, onLogout }) => {
                                     className={`${styles.navTab} ${activeTab === tab ? styles.activeTab : ''}`}
                                     onClick={() => onTabClick(tab)}
                                 >
-                                    {tab} ▼ {/* Down arrow icon */}
+                                    {tab} ▼
                                 </button>
                                 {isSubmissionDropdownVisible && (
                                     <div id="submission-dropdown" className={styles.dropdownContent}>
@@ -98,7 +99,6 @@ const Navbar = ({ id, tabs, activeTab, onTabClick, onLogout }) => {
                     }
                 })}
             </div>
-            {/* Logout Button */}
             <button id="logout-button" className={styles.logoutButton} onClick={onLogout}>
                 Logout
             </button>
@@ -107,7 +107,7 @@ const Navbar = ({ id, tabs, activeTab, onTabClick, onLogout }) => {
 };
 
 Navbar.propTypes = {
-    id: PropTypes.string, // Add this line
+    id: PropTypes.string,
     tabs: PropTypes.arrayOf(PropTypes.string).isRequired,
     activeTab: PropTypes.string.isRequired,
     onTabClick: PropTypes.func.isRequired,
