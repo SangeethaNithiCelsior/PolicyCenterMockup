@@ -63,11 +63,11 @@ jobs:
         cp frontend/test-results.log ci-logs/test-log-${{ github.run_number }}.txt
         git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
-        git fetch origin ci-logs || true
+        git fetch origin
         git checkout ci-logs || git checkout --orphan ci-logs
         git add ci-logs/
         git commit -m "Add test log for run ${{ github.run_number }}" || echo "No changes to commit"
-        git push origin ci-logs
+        git push origin HEAD:ci-logs
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
