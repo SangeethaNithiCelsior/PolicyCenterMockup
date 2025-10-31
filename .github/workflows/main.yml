@@ -37,26 +37,36 @@ jobs:
       run: |
         rm -rf node_modules
         npm cache clean --force
+
     # 5. Install dependencies for frontend
     - name: Install dependencies (frontend)
       working-directory: ./frontend
       run: npm ci --legacy-peer-deps
-    # 6. If inner package exists, install its dependencies
+
+    # 6. Install dependencies (inner package)
     - name: Install dependencies (inner package)
       if: ${{ hashFiles('frontend/inner-package/package-lock.json') != '' }}
       working-directory: ./frontend/inner-package
       run: npm ci --legacy-peer-deps
 
-    # 7. Run tests for frontend
+    # 7. Run tests and save log
     - name: Run tests (frontend)
       working-directory: ./frontend
-      run: npm test -- --watchAll=false
-    # 8. Build the app
+      run: npm test -- --watchAll=false | tee test-results.log
+
+    # 8. Upload test log artifact
+    - name: Upload test log
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-log
+        path: frontend/test-results.log
+
+    # 9. Build the app
     - name: Build the app
       working-directory: ./frontend
       run: npm run build
 
-    # 9. Upload build artifacts
+    # 10. Upload build artifacts
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
