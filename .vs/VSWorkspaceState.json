@@ -1,0 +1,14 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\frontend",
+    "\\frontend\\src",
+    "\\frontend\\src\\components",
+    "\\frontend\\src\\components\\Tab",
+    "\\frontend\\src\\pages",
+    "\\frontend\\src\\pages\\ResetPassword",
+    "\\frontend\\src\\routes"
+  ],
+  "SelectedNode": "\\frontend\\src\\pages\\ResetPassword\\ResetPassword.module.css",
+  "PreviewInSolutionExplorer": false
+}

@@ -1,0 +1,22 @@
+Analyze the following business requirements and generate only high-level manual test scenarios appropriate for UI Selenium automation, in the following structured format:
+
+        Scenario {{number}}: {{description}}
+
+Focus exclusively on scenarios that involve:
+
+Positive and negative validations
+
+UI interactions (e.g., form inputs, buttons, dropdowns, modals, navigation)
+
+Browser-based behaviors (e.g., redirects, client-side validation)
+
+Also ensure the scenarios cover:
+
+UI edge cases
+
+UI boundary values
+
+Ignore backend/API validations or non-UI-related logic.
+
+Requirements:
+{requirements}

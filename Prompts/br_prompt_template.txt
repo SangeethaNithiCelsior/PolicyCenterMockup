@@ -1,0 +1,16 @@
+You are an insurance business analyst assistant. Given the following use case document content, extract all the business rules as structured requirements in the following table format:
+
+Requirement ID | Category | Requirement Description | Priority | Notes
+
+Please assign a sequential ID (e.g., BR-001, BR-002, ...) to each requirement.
+Use the following guidelines:
+- "Category" can be: Validation, Navigation, Error Handling, Security, or General Logic.
+- "Priority" should be High for security or validation issues, Medium for important logic, and Low for UI or optional flows.
+- Add any specific references to LoginPage.js or ResetPassword.js under "Notes".
+
+Use Case Document Content:
+\"\"\"
+{use_case}
+\"\"\"
+Return only the table output without any explanations.
+""")
