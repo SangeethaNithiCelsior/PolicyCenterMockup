@@ -54,7 +54,8 @@ jobs:
     - name: Run tests (frontend)
       working-directory: ./frontend
       run: |
-        npm test -- --watchAll=false --ci > test-results.log 2>&1 || true
+        npm test -- --watchAll=false --ci > test-results.log 2>&1
+        exit_code=$?
 
     # Save test log and commit to ci-logs branch
     - name: Archive and push test log
