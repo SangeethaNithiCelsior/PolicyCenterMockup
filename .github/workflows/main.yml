@@ -5,25 +5,25 @@ on:
     branches:
       - main
       - develop
-  workflow_dispatch:  # ✅ Allows manual trigger from Actions tab
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    # 1. Checkout code
+    # Checkout triggering branch
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. Set up Node.js
+    # Set up Node
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
         cache: 'npm'
 
-    # 3. Cache npm for frontend
+    # Cache frontend npm dependencies
     - name: Cache npm (frontend)
       uses: actions/cache@v3
       with:
@@ -32,47 +32,51 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-npm-
 
-    # 4. Clean environment for frontend
+    # Clean environment for frontend
     - name: Clean environment (frontend)
       working-directory: ./frontend
       run: |
         rm -rf node_modules
         npm cache clean --force
 
-    # 5. Install dependencies for frontend
+    # Install dependencies for frontend
     - name: Install dependencies (frontend)
       working-directory: ./frontend
       run: npm ci --legacy-peer-deps
 
-    # 6. Install dependencies (inner package)
+    # Install inner package dependencies (if present)
     - name: Install dependencies (inner package)
       if: ${{ hashFiles('frontend/inner-package/package-lock.json') != '' }}
       working-directory: ./frontend/inner-package
       run: npm ci --legacy-peer-deps
 
-    # 7. Run tests and save log
+    # Run tests and save log
     - name: Run tests (frontend)
       working-directory: ./frontend
       run: |
         npm test -- --watchAll=false --ci > test-results.log 2>&1 || true
 
-    # 8. Save and commit test log to ci-logs branch
-    - name: Save and commit test log
+    # Save test log and commit to ci-logs branch
+    - name: Archive and push test log
       if: always()
       run: |
+        # Fetch all remote branches, including ci-logs
+        git fetch --all
+        # Try to checkout ci-logs branch; create if necessary
+        git checkout ci-logs || git checkout -b ci-logs
+        git pull origin ci-logs || echo "No remote branch"
+        # Copy test log and stage it
         mkdir -p ci-logs
         cp frontend/test-results.log ci-logs/test-log-${{ github.run_number }}.txt
-        git config --global user.name "github-actions"
         git config --global user.email "github-actions@github.com"
-        git fetch origin ci-logs || true
-        git checkout ci-logs || git checkout --orphan ci-logs
+        git config --global user.name "github-actions"
         git add ci-logs/
         git commit -m "Add test log for run ${{ github.run_number }}" || echo "No changes to commit"
         git push origin ci-logs
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # 9. Build the app
+    # Build the app
     - name: Build the app
       working-directory: ./frontend
       run: npm run build
