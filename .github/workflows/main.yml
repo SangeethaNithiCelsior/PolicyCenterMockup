@@ -16,12 +16,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. Set up Node.js
+    # 2. Set up Node.js (removed cache: 'npm')
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
         node-version: '18'
-        cache: 'npm'
 
     # 3. Cache npm for frontend
     - name: Cache npm (frontend)
@@ -39,8 +38,7 @@ jobs:
         rm -rf node_modules
         npm cache clean --force
 
-   
-    # 5. Install dependencies for frontend
+    # 5. Install dependencies for frontend (conditional fallback)
     - name: Install dependencies (frontend)
       working-directory: ./frontend
       run: |
@@ -50,7 +48,7 @@ jobs:
           npm install --legacy-peer-deps
         fi
 
-    # 6. Install dependencies (inner package)
+    # 6. Install dependencies (inner package) (conditional fallback)
     - name: Install dependencies (inner package)
       working-directory: ./frontend/inner-package
       run: |
@@ -59,7 +57,6 @@ jobs:
         else
           npm install --legacy-peer-deps
         fi
-
 
     # 7. Run tests and save log
     - name: Run tests (frontend)
