@@ -15,6 +15,8 @@ const AppRoutes = () => {
             <Route path="/create-account" element={<CreateAccountPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/new-submission" element={<NewSubmissionsPage />} />
+            {/* Fallback route for undefined paths */}
+            <Route path="*" element={<div style={{padding:'2rem',textAlign:'center'}}><h2>Page Not Found</h2><p>The page you are looking for does not exist.</p></div>} />
         </Routes>
     );
 };

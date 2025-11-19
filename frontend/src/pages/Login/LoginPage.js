@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './LoginPage.module.css';
-import config from '../../config/config'; // Import the config file
+// import config from '../../config/config'; // Temporarily comment out config import
 
 const LoginPage = () => {
     const [username, setUsername] = useState(''); // Blank by default
@@ -10,14 +10,8 @@ const LoginPage = () => {
     const navigate = useNavigate();
 
     const handleLogin = () => {
-        // Retrieve valid credentials from config
-        const { username: validUsername, password: validPassword } = config.credentials;
-
-        if (username === validUsername && password === validPassword) {
-            navigate('/desktop'); // Redirect to the Desktop page
-        } else {
-            setErrorMessage('Your username or password may be incorrect. Please try again'); // Set error message
-        }
+        // Temporarily skip credential check for debug
+        navigate('/desktop'); // Always redirect for debug
     };
 
     const handleResetPassword = () => {
