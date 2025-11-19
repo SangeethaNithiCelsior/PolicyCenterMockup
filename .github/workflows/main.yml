@@ -7,70 +7,94 @@ on:
       - develop
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
-
     steps:
-    # 1. Checkout code
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
 
-    # 2. Set up Node.js
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
-    # 3. Cache npm for frontend
-    - name: Cache npm (frontend)
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-npm-
+      - name: Cache npm (frontend)
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
 
-    # 4. Clean environment for frontend
-    - name: Clean environment (frontend)
-      working-directory: ./frontend
-      run: |
-        rm -rf node_modules
-        npm cache clean --force
+      - name: Clean environment (frontend)
+        working-directory: ./frontend
+        run: |
+          rm -rf node_modules
+          npm cache clean --force
 
-    # 5. Install dependencies for frontend
-    - name: Install dependencies (frontend)
-      working-directory: ./frontend
-      run: |
-        if [ -f package-lock.json ]; then
-          npm ci --legacy-peer-deps
-        else
-          npm install --legacy-peer-deps
-        fi
+      - name: Install dependencies (frontend)
+        working-directory: ./frontend
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --legacy-peer-deps
+          else
+            npm install --legacy-peer-deps
+          fi
 
-    # 6. Run tests and save log
-    - name: Run tests (frontend)
-      working-directory: ./frontend
-      run: |
-        npm test -- --watchAll=false --ci > test-results.log 2>&1 || true
+      - name: Run tests (frontend)
+        working-directory: ./frontend
+        run: |
+          npm test -- --watchAll=false --ci > test-results.log 2>&1 || true
 
-    # 7. Save and commit test log to ci-logs branch
-    - name: Save and commit test log
-      if: always()
-      run: |
-        mkdir -p ci-logs
-        cp frontend/test-results.log ci-logs/test-log-${{ github.run_number }}.txt
-        git config --global user.name "github-actions"
-        git config --global user.email "github-actions@github.com"
-        git fetch origin ci-logs || true
-        git checkout ci-logs || git checkout --orphan ci-logs
-        git add ci-logs/
-        git commit -m "Add test log for run ${{ github.run_number }}" || echo "No changes to commit"
-        git push origin ci-logs
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Save and commit test log to ci-logs branch
+        if: always()
+        env:
+          REPO: ${{ github.repository }}
+          RUN_NUMBER: ${{ github.run_number }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # prepare folder
+          mkdir -p ci-logs
+          cp frontend/test-results.log ci-logs/test-log-${RUN_NUMBER}.txt || echo "no test log"
 
-    # 8. Build the app
-    - name: Build the app
-      working-directory: ./frontend
-      run: npm run build
+          # configure git
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          # create or update ci-logs branch locally
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${REPO}.git
+
+          # fetch ci-logs if exists
+          if git ls-remote --exit-code --heads origin ci-logs; then
+            git fetch origin ci-logs
+            git checkout ci-logs
+          else
+            git checkout --orphan ci-logs
+            git rm -rf . || true
+          fi
+
+          # copy new logs into repo root (or subfolder)
+          mkdir -p ci-logs
+          cp -f ../ci-logs/* ci-logs/ 2>/dev/null || true
+          # move from workspace copy
+          cp -f ci-logs/test-log-${RUN_NUMBER}.txt ci-logs/ || true
+
+          git add ci-logs || true
+          # commit only if there are changes
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Add test log for run ${RUN_NUMBER}" || true
+            git push origin ci-logs --set-upstream
+          fi
+
+      - name: Build the app (frontend)
+        working-directory: ./frontend
+        run: npm run build --if-present
