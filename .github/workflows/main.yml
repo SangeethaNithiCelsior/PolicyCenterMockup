@@ -39,16 +39,27 @@ jobs:
         rm -rf node_modules
         npm cache clean --force
 
+   
     # 5. Install dependencies for frontend
     - name: Install dependencies (frontend)
       working-directory: ./frontend
-      run: npm ci --legacy-peer-deps
+      run: |
+        if [ -f package-lock.json ]; then
+          npm ci --legacy-peer-deps
+        else
+          npm install --legacy-peer-deps
+        fi
 
     # 6. Install dependencies (inner package)
     - name: Install dependencies (inner package)
-      if: ${{ hashFiles('frontend/inner-package/package-lock.json') != '' }}
       working-directory: ./frontend/inner-package
-      run: npm ci --legacy-peer-deps
+      run: |
+        if [ -f package-lock.json ]; then
+          npm ci --legacy-peer-deps
+        else
+          npm install --legacy-peer-deps
+        fi
+
 
     # 7. Run tests and save log
     - name: Run tests (frontend)
