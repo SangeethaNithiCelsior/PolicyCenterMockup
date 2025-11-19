@@ -16,7 +16,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. Set up Node.js (removed cache: 'npm')
+    # 2. Set up Node.js
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
@@ -48,8 +48,6 @@ jobs:
           npm install --legacy-peer-deps
         fi
 
-    # ✅ Removed inner-package step (it doesn't exist)
-
     # 6. Run tests and save log
     - name: Run tests (frontend)
       working-directory: ./frontend
@@ -75,3 +73,4 @@ jobs:
     # 8. Build the app
     - name: Build the app
       working-directory: ./frontend
+      run: npm run build
