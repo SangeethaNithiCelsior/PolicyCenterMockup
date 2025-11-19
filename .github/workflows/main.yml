@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - develop
-  workflow_dispatch:  # ✅ Allows manual trigger from Actions tab
+  workflow_dispatch:
 
 jobs:
   build:
@@ -38,7 +38,7 @@ jobs:
         rm -rf node_modules
         npm cache clean --force
 
-    # 5. Install dependencies for frontend (conditional fallback)
+    # 5. Install dependencies for frontend
     - name: Install dependencies (frontend)
       working-directory: ./frontend
       run: |
@@ -48,23 +48,15 @@ jobs:
           npm install --legacy-peer-deps
         fi
 
-    # 6. Install dependencies (inner package) (conditional fallback)
-    - name: Install dependencies (inner package)
-      working-directory: ./frontend/inner-package
-      run: |
-        if [ -f package-lock.json ]; then
-          npm ci --legacy-peer-deps
-        else
-          npm install --legacy-peer-deps
-        fi
+    # ✅ Removed inner-package step (it doesn't exist)
 
-    # 7. Run tests and save log
+    # 6. Run tests and save log
     - name: Run tests (frontend)
       working-directory: ./frontend
       run: |
         npm test -- --watchAll=false --ci > test-results.log 2>&1 || true
 
-    # 8. Save and commit test log to ci-logs branch
+    # 7. Save and commit test log to ci-logs branch
     - name: Save and commit test log
       if: always()
       run: |
@@ -80,7 +72,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # 9. Build the app
+    # 8. Build the app
     - name: Build the app
       working-directory: ./frontend
-      run: npm run build
