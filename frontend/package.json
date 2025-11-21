@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "ajv": "^8.12.0",
     "cra-template": "1.2.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -20,9 +21,9 @@
     "test:ci": "react-scripts test --coverage --watchAll=false --ci",
     "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache",
     "eject": "react-scripts eject",
-	"predeploy": "npm run build",
-	"deploy": "gh-pages -d build"
-
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "postinstall": "node ./scripts/patch-schema-utils.js"
   },
   "eslintConfig": {
     "extends": [
@@ -47,7 +48,11 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
-    "gh-pages": "^6.3.0"
-    ,"typescript": "^5.9.3"
+    "eslint": "^8.57.1",
+    "gh-pages": "^6.3.0",
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    
   }
 }
