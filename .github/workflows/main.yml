@@ -60,40 +60,48 @@ jobs:
           RUN_NUMBER: ${{ github.run_number }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # prepare folder
-          mkdir -p ci-logs
-          cp frontend/test-results.log ci-logs/test-log-${RUN_NUMBER}.txt || echo "no test log"
+          set -euo pipefail
 
-          # configure git
+          echo "Preparing run-specific logs (no top-level ci-logs folder)..."
+
+          # write logs to a run-specific folder (avoid creating a top-level 'ci-logs' path)
+          LOG_DIR="logs/ci/${RUN_NUMBER}"
+          mkdir -p "$LOG_DIR"
+
+          # copy only the test result into the run-specific folder
+          if [ -f ./frontend/test-results.log ]; then
+            cp ./frontend/test-results.log "$LOG_DIR/test-log-${RUN_NUMBER}.txt"
+          else
+            echo "no frontend/test-results.log found"
+          fi
+
+          # configure git user
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # create or update ci-logs branch locally
-          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${REPO}.git
+          # use token so push is allowed
+          git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
 
-          # fetch ci-logs if exists
-          if git ls-remote --exit-code --heads origin ci-logs; then
-            git fetch origin ci-logs
-            git checkout ci-logs
-          else
-            git checkout --orphan ci-logs
-            git rm -rf . || true
-          fi
+          # fetch remote ci-logs ref if it exists (safe)
+          git fetch origin +refs/heads/ci-logs:refs/remotes/origin/ci-logs || true
 
-          # copy new logs into repo root (or subfolder)
-          mkdir -p ci-logs
-          cp -f ../ci-logs/* ci-logs/ 2>/dev/null || true
-          # move from workspace copy
-          cp -f ci-logs/test-log-${RUN_NUMBER}.txt ci-logs/ || true
+          # create a temp branch (based on current workspace) to stage only the logs
+          git checkout -B temp-commit-logs
 
-          git add ci-logs || true
-          # commit only if there are changes
+          # add only the run-specific logs (force in case of gitignore)
+          git add --force "$LOG_DIR" || true
+
+          # commit only if there are staged changes
           if git diff --staged --quiet; then
-            echo "No changes to commit"
+            echo "No log changes to commit"
           else
-            git commit -m "Add test log for run ${RUN_NUMBER}" || true
-            git push origin ci-logs --set-upstream
+            git commit -m "Add CI logs for run ${RUN_NUMBER}"
+            # push explicitly to refs/heads/ci-logs to avoid name ambiguity
+            git push origin HEAD:refs/heads/ci-logs --force-with-lease
           fi
+
+          # restore previous branch (best-effort)
+          git checkout - || true
 
       - name: Build the app (frontend)
         working-directory: ./frontend
