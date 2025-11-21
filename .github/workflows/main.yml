@@ -100,7 +100,7 @@ jobs:
             git push origin HEAD:refs/heads/ci-logs --force-with-lease
           fi
 
-          # restore previous branch (best-effort)
+          # restore previous branch (best-effort) dummy update
           git checkout - || true
 
       - name: Build the app (frontend)
