@@ -97,5 +97,5 @@ jobs:
           git add "logs/ci/${GITHUB_RUN_ID}"
           git commit -m "Add CI logs for run ${GITHUB_RUN_ID}" || echo "No changes to commit"
 
-          # Push explicitly to refs/heads/ci-logs to avoid ambiguity between file and branch name
+          # Push explicitly to refs/heads/ci-logs to avoid ambiguity between file and branch name update for push
           git push origin HEAD:refs/heads/ci-logs --force-with-lease
