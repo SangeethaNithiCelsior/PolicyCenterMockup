@@ -52,3 +52,50 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # ---- New job: push run-specific logs to ci-logs branch ----
+  push-logs:
+    runs-on: ubuntu-latest
+    needs: build
+    # we only need minimal permissions (already set at top), but ensure we can push
+    steps:
+      - name: Checkout (for pushing logs)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Configure git user
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Prepare logs folder (run-specific path)
+        run: |
+          LOG_DIR="logs/ci/${GITHUB_RUN_ID}"
+          mkdir -p "$LOG_DIR"
+          # ---- Replace these cp lines with your real log locations ----
+          # Example: copy build logs or any generated logs into the run-specific folder
+          # Copy frontend build list as example (change to your logs)
+          ls -R ./frontend/build > "$LOG_DIR/build-list.txt" || true
+
+          # Example: copy the screenshot you shared into the logs (developer-provided path)
+          cp /mnt/data/89f501cb-fd61-44e8-a359-5a3debed9275.png "$LOG_DIR/" || echo "screenshot not found"
+
+          # If your job creates a "generated-logs" folder, copy it:
+          # cp -r path/to/generated/logs/* "$LOG_DIR/" || echo "no generated logs"
+
+      - name: Commit & push logs into ci-logs branch
+        run: |
+          # Ensure we have the remote ci-logs (no ambiguity)
+          git fetch origin +refs/heads/ci-logs:refs/remotes/origin/ci-logs || true
+
+          # Create a temp branch to collect the log commit
+          git checkout -B temp-commit-logs
+
+          # Add the new logs folder and commit
+          git add "logs/ci/${GITHUB_RUN_ID}"
+          git commit -m "Add CI logs for run ${GITHUB_RUN_ID}" || echo "No changes to commit"
+
+          # Push explicitly to refs/heads/ci-logs to avoid ambiguity between file and branch name
+          git push origin HEAD:refs/heads/ci-logs --force-with-lease
