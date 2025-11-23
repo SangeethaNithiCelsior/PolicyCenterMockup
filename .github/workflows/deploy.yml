@@ -112,7 +112,7 @@ jobs:
           git commit -m "Add deploy logs for run ${GITHUB_RUN_NUMBER}"
           git push origin deploy-logs
 
-      # 3) UPLOAD ARTIFACT FOR PAGES DEPLOY
+      # 3) UPLOAD ARTIFACT FOR PAGES DEPLOY 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
