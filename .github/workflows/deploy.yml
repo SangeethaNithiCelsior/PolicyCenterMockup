@@ -111,6 +111,14 @@ jobs:
 
           git commit -m "Add deploy logs for run ${GITHUB_RUN_NUMBER}"
           git push origin deploy-logs
+          
+      - name: Cleanup old logs (keep last 5)
+        if: always()
+        shell: bash
+        run: |
+          cd logs/ci || exit 0
+          ls -1 | sort -n | head -n -5 | xargs -r rm -rf
+
 
       # 3) UPLOAD ARTIFACT FOR PAGES DEPLOY 
       - name: Upload artifact

@@ -145,6 +145,14 @@ jobs:
 
           git commit -m "Add test logs for run ${GITHUB_RUN_NUMBER}"
           git push origin ci-logs
+          
+      - name: Cleanup old logs (keep last 5)
+        if: always()
+        shell: bash
+        run: |
+          cd logs/ci || exit 0
+          ls -1 | sort -n | head -n -5 | xargs -r rm -rf
+
 
       # 3) FAIL THE JOB IF TESTS FAILED (AFTER LOGS ARE PUSHED)
       - name: Fail job if tests failed
