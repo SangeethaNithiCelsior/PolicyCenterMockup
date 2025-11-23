@@ -49,7 +49,7 @@ jobs:
             npm install --legacy-peer-deps
           fi
 
-      # ✅ RUN TESTS + CREATE TIMESTAMPED LOG
+      # 1) RUN TESTS, CAPTURE LOG + EXIT CODE (BUT DO NOT FAIL JOB YET)
       - name: Run tests (frontend) and capture log
         working-directory: ./frontend
         shell: bash
@@ -61,15 +61,24 @@ jobs:
 
           TIMESTAMP=$(date -u +"%Y%m%dT%H%M%SZ")
           LOG_FILE="$LOG_DIR/test-${GITHUB_RUN_NUMBER}-attempt${GITHUB_RUN_ATTEMPT}-${TIMESTAMP}.log"
+          STATUS_FILE="$LOG_DIR/test-exit-code.txt"
 
           echo "Writing Jest output to $LOG_FILE"
+
+          # run tests but don't kill the job yet
+          set +e
           npm run test:ci | tee "$LOG_FILE"
+          TEST_EXIT=$?
+          set -e
+
+          echo "$TEST_EXIT" > "$STATUS_FILE"
 
           echo "===== Log file summary ====="
           ls -l "$LOG_FILE" || echo "log file not found"
           wc -c "$LOG_FILE" || true
+          echo "Test command exit code: $TEST_EXIT (saved in $STATUS_FILE)"
 
-      # ✅ PUSH ONLY LOGS TO ci-logs BRANCH
+      # 2) PUSH ONLY LOGS TO ci-logs (TEMP REPO TRICK)
       - name: Push logs to ci-logs branch (logs-only)
         if: always()
         env:
@@ -86,7 +95,7 @@ jobs:
           fi
 
           echo "Logs to be pushed:"
-          ls -R "$LOG_ROOT" || echo "No logs found"
+          ls -R "$LOG_ROOT" || echo "No logs found under $LOG_ROOT"
 
           rm -rf "$TEMP_REPO"
           mkdir "$TEMP_REPO"
@@ -108,9 +117,32 @@ jobs:
           git commit -m "Add test logs for run ${GITHUB_RUN_NUMBER}"
           git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
 
+          # ci-logs branch will now contain ONLY the logs folder snapshot
           git push origin HEAD:refs/heads/ci-logs --force-with-lease || true
 
-      # ✅ OPTIONAL: STILL BUILD APP IF YOU WANT
+      # 3) FAIL THE JOB IF TESTS FAILED (AFTER LOGS ARE PUSHED)
+      - name: Fail job if tests failed
+        shell: bash
+        run: |
+          LOG_DIR="logs/ci/${GITHUB_RUN_NUMBER}"
+          STATUS_FILE="$LOG_DIR/test-exit-code.txt"
+
+          if [ ! -f "$STATUS_FILE" ]; then
+            echo "No test status file found at $STATUS_FILE. Assuming success."
+            exit 0
+          fi
+
+          TEST_EXIT=$(cat "$STATUS_FILE" || echo "0")
+          echo "Recorded test exit code: $TEST_EXIT"
+
+          if [ "$TEST_EXIT" -ne 0 ]; then
+            echo "Tests failed with exit code $TEST_EXIT"
+            exit 1
+          fi
+
+          echo "Tests passed, continuing."
+
+      # 4) ONLY BUILD IF TESTS PASSED
       - name: Build the app (frontend)
         working-directory: ./frontend
         env:
