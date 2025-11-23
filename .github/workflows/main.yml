@@ -117,8 +117,8 @@ jobs:
           git commit -m "Add test logs for run ${GITHUB_RUN_NUMBER}"
           git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
 
-          # ci-logs branch will now contain ONLY the logs folder snapshot
-          git push origin HEAD:refs/heads/ci-logs --force-with-lease || true
+          # IMPORTANT: use --force (not --force-with-lease) in this throwaway repo
+          git push origin HEAD:refs/heads/ci-logs --force
 
       # 3) FAIL THE JOB IF TESTS FAILED (AFTER LOGS ARE PUSHED)
       - name: Fail job if tests failed
