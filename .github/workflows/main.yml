@@ -67,13 +67,15 @@ jobs:
 
           # run tests but don't kill the job yet
           set +e
-          npm run test:ci | tee "$LOG_FILE"
-          TEST_EXIT=$?
+          # 👇 capture BOTH stdout + stderr into the log
+          npm run test:ci 2>&1 | tee "$LOG_FILE"
+          # 👇 get exit code of npm, not tee
+          TEST_EXIT=${PIPESTATUS[0]}
           set -e
 
           echo "$TEST_EXIT" > "$STATUS_FILE"
 
-          # 🔴 Explicit PASS / FAIL line in the log
+          # explicit PASS / FAIL marker
           if [ "$TEST_EXIT" -eq 0 ]; then
             echo "" | tee -a "$LOG_FILE"
             echo "===== TEST STATUS: PASSED =====" | tee -a "$LOG_FILE"
