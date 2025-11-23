@@ -73,21 +73,23 @@ jobs:
 
           echo "$TEST_EXIT" > "$STATUS_FILE"
 
-          # 👇 ADD THIS BLOCK
+          # 🔴 Explicit PASS / FAIL line in the log
           if [ "$TEST_EXIT" -eq 0 ]; then
-            echo "TEST STATUS: PASSED" | tee -a "$LOG_FILE"
+            echo "" | tee -a "$LOG_FILE"
+            echo "===== TEST STATUS: PASSED =====" | tee -a "$LOG_FILE"
           else
-            echo "TEST STATUS: FAILED (exit code $TEST_EXIT)" | tee -a "$LOG_FILE"
+            echo "" | tee -a "$LOG_FILE"
+            echo "===== TEST STATUS: FAILED (exit code $TEST_EXIT) =====" | tee -a "$LOG_FILE"
           fi
-          # 👆
 
-          echo "===== Log file summary ====="
+          echo "" | tee -a "$LOG_FILE"
+          echo "===== Log file summary (size) =====" | tee -a "$LOG_FILE"
           ls -l "$LOG_FILE" || echo "log file not found"
           wc -c "$LOG_FILE" || true
           echo "Test command exit code: $TEST_EXIT (saved in $STATUS_FILE)"
 
       # 2) PUSH ONLY LOGS TO ci-logs (TEMP REPO TRICK)
-      - name: Push logs to ci-logs branch (logs-only)
+      - name: Push logs to ci-logs branch (logs-only, keep history)
         if: always()
         env:
           REPO: ${{ github.repository }}
@@ -95,27 +97,44 @@ jobs:
         shell: bash
         run: |
           LOG_ROOT="logs"
+          RUN_LOG_DIR="logs/ci/${GITHUB_RUN_NUMBER}"
           TEMP_REPO=".ci-logs-tmp"
 
-          if [ ! -d "$LOG_ROOT" ]; then
-            echo "No logs directory to push. Exiting."
+          if [ ! -d "$RUN_LOG_DIR" ]; then
+            echo "No run-specific logs at $RUN_LOG_DIR. Exiting."
             exit 0
           fi
 
-          echo "Logs to be pushed:"
-          ls -R "$LOG_ROOT" || echo "No logs found under $LOG_ROOT"
+          echo "Run logs to be pushed (local workspace):"
+          ls -R "$RUN_LOG_DIR" || echo "No files under $RUN_LOG_DIR"
 
           rm -rf "$TEMP_REPO"
           mkdir "$TEMP_REPO"
-          cp -r "$LOG_ROOT" "$TEMP_REPO/"
-
           cd "$TEMP_REPO"
 
+          # Clone only the ci-logs branch if it exists, otherwise start fresh
           git init
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
 
-          git add logs || true
+          if git ls-remote --exit-code origin refs/heads/ci-logs > /dev/null 2>&1; then
+            echo "ci-logs branch exists, fetching it..."
+            git fetch origin ci-logs
+            git checkout -b ci-logs origin/ci-logs
+          else
+            echo "ci-logs branch does not exist, creating new."
+            git checkout -b ci-logs
+          fi
+
+          # Copy ONLY this run's logs into the repo, preserving older runs
+          mkdir -p logs/ci
+          cp -r "../${RUN_LOG_DIR}" "logs/ci/"
+
+          echo "Logs in temp repo before commit:"
+          ls -R logs || echo "No logs in temp repo"
+
+          git add "logs/ci/${GITHUB_RUN_NUMBER}" || true
 
           if git diff --cached --quiet; then
             echo "No log changes to commit"
@@ -123,10 +142,7 @@ jobs:
           fi
 
           git commit -m "Add test logs for run ${GITHUB_RUN_NUMBER}"
-          git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
-
-          # IMPORTANT: use --force (not --force-with-lease) in this throwaway repo
-          git push origin HEAD:refs/heads/ci-logs --force
+          git push origin ci-logs
 
       # 3) FAIL THE JOB IF TESTS FAILED (AFTER LOGS ARE PUSHED)
       - name: Fail job if tests failed
