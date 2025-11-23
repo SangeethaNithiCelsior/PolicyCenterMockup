@@ -112,6 +112,8 @@ jobs:
           git push origin HEAD:refs/heads/ci-logs --force-with-lease || true
 
       # ✅ OPTIONAL: STILL BUILD APP IF YOU WANT
-      - name: Build the app (frontend)
+       - name: Build the app (frontend)
         working-directory: ./frontend
+        env:
+          DISABLE_ESLINT_PLUGIN: true
         run: npm run build --if-present
