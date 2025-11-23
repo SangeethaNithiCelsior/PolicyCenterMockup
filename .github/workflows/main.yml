@@ -13,6 +13,7 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -48,61 +49,69 @@ jobs:
             npm install --legacy-peer-deps
           fi
 
-      - name: Run tests (frontend)
+      # ✅ RUN TESTS + CREATE TIMESTAMPED LOG
+      - name: Run tests (frontend) and capture log
         working-directory: ./frontend
+        shell: bash
+        continue-on-error: true
         run: |
-          npm test -- --watchAll=false --ci > test-results.log 2>&1 || true
+          set -o pipefail
 
-      - name: Save and commit test log to ci-logs branch
+          LOG_DIR="../logs/ci/${GITHUB_RUN_NUMBER}"
+          mkdir -p "$LOG_DIR"
+
+          TIMESTAMP=$(date -u +"%Y%m%dT%H%M%SZ")
+          LOG_FILE="$LOG_DIR/test-${GITHUB_RUN_NUMBER}-attempt${GITHUB_RUN_ATTEMPT}-${TIMESTAMP}.log"
+
+          echo "Writing Jest output to $LOG_FILE"
+          npm run test:ci | tee "$LOG_FILE"
+
+          echo "===== Log file summary ====="
+          ls -l "$LOG_FILE" || echo "log file not found"
+          wc -c "$LOG_FILE" || true
+
+      # ✅ PUSH ONLY LOGS TO ci-logs BRANCH
+      - name: Push logs to ci-logs branch (logs-only)
         if: always()
         env:
           REPO: ${{ github.repository }}
-          RUN_NUMBER: ${{ github.run_number }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
         run: |
-          set -euo pipefail
+          LOG_ROOT="logs"
+          TEMP_REPO=".ci-logs-tmp"
 
-          echo "Preparing run-specific logs (no top-level ci-logs folder)..."
-
-          # write logs to a run-specific folder (avoid creating a top-level 'ci-logs' path)
-          LOG_DIR="logs/ci/${RUN_NUMBER}"
-          mkdir -p "$LOG_DIR"
-
-          # copy only the test result into the run-specific folder
-          if [ -f ./frontend/test-results.log ]; then
-            cp ./frontend/test-results.log "$LOG_DIR/test-log-${RUN_NUMBER}.txt"
-          else
-            echo "no frontend/test-results.log found"
+          if [ ! -d "$LOG_ROOT" ]; then
+            echo "No logs directory to push. Exiting."
+            exit 0
           fi
 
-          # configure git user
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "Logs to be pushed:"
+          ls -R "$LOG_ROOT" || echo "No logs found"
 
-          # use token so push is allowed
-          git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
+          rm -rf "$TEMP_REPO"
+          mkdir "$TEMP_REPO"
+          cp -r "$LOG_ROOT" "$TEMP_REPO/"
 
-          # fetch remote ci-logs ref if it exists (safe)
-          git fetch origin +refs/heads/ci-logs:refs/remotes/origin/ci-logs || true
+          cd "$TEMP_REPO"
 
-          # create a temp branch (based on current workspace) to stage only the logs
-          git checkout -B temp-commit-logs
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          # add only the run-specific logs (force in case of gitignore)
-          git add --force "$LOG_DIR" || true
+          git add logs || true
 
-          # commit only if there are staged changes
-          if git diff --staged --quiet; then
+          if git diff --cached --quiet; then
             echo "No log changes to commit"
-          else
-            git commit -m "Add CI logs for run ${RUN_NUMBER}"
-            # push explicitly to refs/heads/ci-logs to avoid name ambiguity
-            git push origin HEAD:refs/heads/ci-logs --force-with-lease
+            exit 0
           fi
 
-          # restore previous branch (best-effort) dummy update
-          git checkout - || true
+          git commit -m "Add test logs for run ${GITHUB_RUN_NUMBER}"
+          git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
 
+          git push origin HEAD:refs/heads/ci-logs --force-with-lease || true
+
+      # ✅ OPTIONAL: STILL BUILD APP IF YOU WANT
       - name: Build the app (frontend)
         working-directory: ./frontend
         run: npm run build --if-present
