@@ -70,20 +70,25 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Prepare logs folder (run-specific path)
+         - name: Collect deploy logs
         run: |
-          LOG_DIR="logs/ci/${GITHUB_RUN_ID}"
-          mkdir -p "$LOG_DIR"
-          # ---- Replace these cp lines with your real log locations ----
-          # Example: copy build logs or any generated logs into the run-specific folder
-          # Copy frontend build list as example (change to your logs)
-          ls -R ./frontend/build > "$LOG_DIR/build-list.txt" || true
+            LOG_DIR="logs/ci/${GITHUB_RUN_ID}"
+            mkdir -p "$LOG_DIR"
 
-          # Example: copy the screenshot you shared into the logs (developer-provided path)
-          cp /mnt/data/89f501cb-fd61-44e8-a359-5a3debed9275.png "$LOG_DIR/" || echo "screenshot not found"
+            if [ -d ./frontend/build ]; then
+              echo "Frontend build directory found, listing contents..."
+              ls -R ./frontend/build > "$LOG_DIR/build-list.txt"
+            else
+              echo "No ./frontend/build folder found, writing note into build-list.txt"
+              echo "No build directory at ./frontend/build for this run." > "$LOG_DIR/build-list.txt"
+            fi
 
-          # If your job creates a "generated-logs" folder, copy it:
-          # cp -r path/to/generated/logs/* "$LOG_DIR/" || echo "no generated logs"
+            # Example screenshot copy (keep or remove as needed)
+            if [ -f /mnt/data/89f501cb-fd61-44e8-a359-5a3debed9275.png ]; then
+              cp /mnt/data/89f501cb-fd61-44e8-a359-5a3debed9275.png "$LOG_DIR/"
+            else
+              echo "screenshot not found"
+            fi
 
       - name: Commit & push logs into ci-logs branch
         run: |
