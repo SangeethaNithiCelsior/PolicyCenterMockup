@@ -64,20 +64,20 @@ jobs:
             echo "screenshot not found"
           fi
 
-      - name: Commit & push logs into ci-logs branch
+      - name: Commit & push logs into deploy-logs branch
         run: |
-          # Ensure we have the remote ci-logs (no ambiguity)
-          git fetch origin +refs/heads/ci-logs:refs/remotes/origin/ci-logs || true
+          # Ensure we have the remote deploy-logs (no ambiguity)
+          git fetch origin +refs/heads/deploy-logs:refs/remotes/origin/deploy-logs || true
 
           # Create a temp branch to collect the log commit
           git checkout -B temp-commit-logs
 
           # Add the new logs folder and commit
-          git add "logs/ci/${GITHUB_RUN_NUMBER}" || true
-          git commit -m "Add CI logs for run ${GITHUB_RUN_NUMBER}" || echo "No changes to commit"
+          git add "logs/ci/${GITHUB_RUN_NUMBER}"
+          git commit -m "Add deploy logs for run ${GITHUB_RUN_NUMBER}" || echo "No changes to commit"
 
-          # Push explicitly to refs/heads/ci-logs to avoid ambiguity
-          git push origin HEAD:refs/heads/ci-logs --force-with-lease || true
+          # Push explicitly to refs/heads/deploy-logs
+          git push origin HEAD:refs/heads/deploy-logs --force-with-lease || true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
