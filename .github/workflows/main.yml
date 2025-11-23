@@ -53,7 +53,6 @@ jobs:
       - name: Run tests (frontend) and capture log
         working-directory: ./frontend
         shell: bash
-        continue-on-error: true
         run: |
           set -o pipefail
 
