@@ -75,6 +75,7 @@ jobs:
           echo "Run logs to be pushed (local workspace):"
           ls -R "$RUN_LOG_DIR" || echo "No files under $RUN_LOG_DIR"
 
+          # fresh temp repo
           rm -rf "$TEMP_REPO"
           mkdir "$TEMP_REPO"
           cd "$TEMP_REPO"
@@ -84,7 +85,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
 
-          # If deploy-logs already exists, pull it; otherwise start new
+          # if deploy-logs already exists, fetch it; otherwise start new
           if git ls-remote --exit-code origin refs/heads/deploy-logs > /dev/null 2>&1; then
             echo "deploy-logs branch exists, fetching it..."
             git fetch origin deploy-logs
@@ -94,7 +95,7 @@ jobs:
             git checkout -b deploy-logs
           fi
 
-          # Copy ONLY this run's logs, preserving previous runs
+          # ⚠️ only logs go into this repo
           mkdir -p logs/ci
           cp -r "../${RUN_LOG_DIR}" "logs/ci/"
 
