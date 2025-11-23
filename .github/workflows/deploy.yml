@@ -38,32 +38,7 @@ jobs:
       - name: Verify build output
         run: ls -R ./frontend/build || true
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
-        with:
-          path: ./frontend/build
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    environment:
-      name: github-pages
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-
-  # ---- New job: push run-specific logs to ci-logs branch ----
-  push-logs:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout (for pushing logs)
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: true
-
+      # ----- NEW: collect build logs and push to ci-logs branch -----
       - name: Configure git user
         run: |
           git config user.name "github-actions[bot]"
@@ -71,7 +46,7 @@ jobs:
 
       - name: Collect deploy logs
         run: |
-          LOG_DIR="logs/ci/${GITHUB_RUN_ID}"
+          LOG_DIR="logs/ci/${GITHUB_RUN_NUMBER}"
           mkdir -p "$LOG_DIR"
 
           if [ -d ./frontend/build ]; then
@@ -98,8 +73,24 @@ jobs:
           git checkout -B temp-commit-logs
 
           # Add the new logs folder and commit
-          git add "logs/ci/${GITHUB_RUN_ID}"
-          git commit -m "Add CI logs for run ${GITHUB_RUN_ID}" || echo "No changes to commit"
+          git add "logs/ci/${GITHUB_RUN_NUMBER}" || true
+          git commit -m "Add CI logs for run ${GITHUB_RUN_NUMBER}" || echo "No changes to commit"
 
           # Push explicitly to refs/heads/ci-logs to avoid ambiguity
-          git push origin HEAD:refs/heads/ci-logs --force-with-lease
+          git push origin HEAD:refs/heads/ci-logs --force-with-lease || true
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./frontend/build
+  # -----------------------------------------------------------
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
