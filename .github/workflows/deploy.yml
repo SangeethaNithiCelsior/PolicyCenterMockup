@@ -38,13 +38,9 @@ jobs:
       - name: Verify build output
         run: ls -R ./frontend/build || true
 
-      # ----- NEW: collect build logs and push to ci-logs branch -----
-      - name: Configure git user
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
+      # 1) COLLECT DEPLOY LOGS FOR THIS RUN
       - name: Collect deploy logs
+        shell: bash
         run: |
           LOG_DIR="logs/ci/${GITHUB_RUN_NUMBER}"
           mkdir -p "$LOG_DIR"
@@ -57,33 +53,69 @@ jobs:
             echo "No build directory at ./frontend/build for this run." > "$LOG_DIR/build-list.txt"
           fi
 
-          # Example screenshot copy (keep or remove as needed)
-          if [ -f /mnt/data/89f501cb-fd61-44e8-a359-5a3debed9275.png ]; then
-            cp /mnt/data/89f501cb-fd61-44e8-a359-5a3debed9275.png "$LOG_DIR/"
-          else
-            echo "screenshot not found"
+          echo "Deploy logs written under $LOG_DIR:"
+          ls -R "$LOG_DIR" || echo "No files written to $LOG_DIR"
+
+      # 2) PUSH ONLY THESE LOGS TO deploy-logs BRANCH (KEEP HISTORY)
+      - name: Push deploy logs to deploy-logs branch (logs-only, keep history)
+        if: always()
+        env:
+          REPO: ${{ github.repository }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          RUN_LOG_DIR="logs/ci/${GITHUB_RUN_NUMBER}"
+          TEMP_REPO=".deploy-logs-tmp"
+
+          if [ ! -d "$RUN_LOG_DIR" ]; then
+            echo "No run-specific logs at $RUN_LOG_DIR. Exiting."
+            exit 0
           fi
 
-      - name: Commit & push logs into deploy-logs branch
-        run: |
-          # Ensure we have the remote deploy-logs (no ambiguity)
-          git fetch origin +refs/heads/deploy-logs:refs/remotes/origin/deploy-logs || true
+          echo "Run logs to be pushed (local workspace):"
+          ls -R "$RUN_LOG_DIR" || echo "No files under $RUN_LOG_DIR"
 
-          # Create a temp branch to collect the log commit
-          git checkout -B temp-commit-logs
+          rm -rf "$TEMP_REPO"
+          mkdir "$TEMP_REPO"
+          cd "$TEMP_REPO"
 
-          # Add the new logs folder and commit
-          git add "logs/ci/${GITHUB_RUN_NUMBER}"
-          git commit -m "Add deploy logs for run ${GITHUB_RUN_NUMBER}" || echo "No changes to commit"
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
 
-          # Push explicitly to refs/heads/deploy-logs
-          git push origin HEAD:refs/heads/deploy-logs --force-with-lease || true
+          # If deploy-logs already exists, pull it; otherwise start new
+          if git ls-remote --exit-code origin refs/heads/deploy-logs > /dev/null 2>&1; then
+            echo "deploy-logs branch exists, fetching it..."
+            git fetch origin deploy-logs
+            git checkout -b deploy-logs origin/deploy-logs
+          else
+            echo "deploy-logs branch does not exist, creating new."
+            git checkout -b deploy-logs
+          fi
 
+          # Copy ONLY this run's logs, preserving previous runs
+          mkdir -p logs/ci
+          cp -r "../${RUN_LOG_DIR}" "logs/ci/"
+
+          echo "Logs in temp repo before commit:"
+          ls -R logs || echo "No logs in temp repo"
+
+          git add "logs/ci/${GITHUB_RUN_NUMBER}" || true
+
+          if git diff --cached --quiet; then
+            echo "No log changes to commit"
+            exit 0
+          fi
+
+          git commit -m "Add deploy logs for run ${GITHUB_RUN_NUMBER}"
+          git push origin deploy-logs
+
+      # 3) UPLOAD ARTIFACT FOR PAGES DEPLOY
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: ./frontend/build
-  # -----------------------------------------------------------
 
   deploy:
     runs-on: ubuntu-latest
