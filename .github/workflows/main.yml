@@ -93,6 +93,16 @@ jobs:
           wc -c "$LOG_FILE" || true
           echo "Test command exit code: $TEST_EXIT (saved in $STATUS_FILE)"
 
+          echo ""
+          echo "Stripping ANSI color codes from $LOG_FILE"
+          CLEAN_LOG="${LOG_FILE%.log}-clean.log"
+
+          # Remove color escape sequences like ^[[36m, ^[[0m, etc.
+          sed -r 's/\x1B\[[0-9;]*[mK]//g' "$LOG_FILE" > "$CLEAN_LOG" || true
+
+          mv "$CLEAN_LOG" "$LOG_FILE" || true
+          echo "ANSI-stripped log saved back to $LOG_FILE"
+
       # 2) PUSH ONLY LOGS TO ci-logs (TEMP REPO TRICK)
       - name: Push logs to ci-logs branch (logs-only, keep history)
         if: always()
