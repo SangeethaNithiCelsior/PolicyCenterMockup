@@ -13,21 +13,29 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           persist-credentials: true
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
 
       - name: Install dependencies
         working-directory: ./frontend
-        run: npm install --legacy-peer-deps
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --legacy-peer-deps
+          else
+            npm install --legacy-peer-deps
+          fi
 
       - name: Build React App
         working-directory: ./frontend
@@ -56,9 +64,10 @@ jobs:
           echo "Deploy logs written under $LOG_DIR:"
           ls -R "$LOG_DIR" || echo "No files written to $LOG_DIR"
 
-      # 2) PUSH ONLY THESE LOGS TO deploy-logs BRANCH (KEEP HISTORY)
+      # 2) PUSH ONLY THESE LOGS TO deploy-logs BRANCH (KEEP HISTORY - OPTIMIZED)
       - name: Push deploy logs to deploy-logs branch (logs-only, keep history)
         if: always()
+        timeout-minutes: 5
         env:
           REPO: ${{ github.repository }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -85,10 +94,10 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
 
-          # if deploy-logs already exists, fetch it; otherwise start new
+          # if deploy-logs already exists, fetch it with minimal depth; otherwise start new
           if git ls-remote --exit-code origin refs/heads/deploy-logs > /dev/null 2>&1; then
-            echo "deploy-logs branch exists, fetching it..."
-            git fetch origin deploy-logs
+            echo "deploy-logs branch exists, fetching it with depth 1..."
+            git fetch --depth=1 origin deploy-logs
             git checkout -b deploy-logs origin/deploy-logs
           else
             echo "deploy-logs branch does not exist, creating new."
@@ -120,10 +129,18 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     needs: build
     environment:
       name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+      
+      - name: Verify deployment
+        if: success()
+        run: |
+          echo "✅ Deployment successful!"
+          echo "🌐 Site URL: ${{ steps.deployment.outputs.page_url }}"

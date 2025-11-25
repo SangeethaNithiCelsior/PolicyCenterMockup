@@ -1,11 +1,17 @@
 name: cleanup-logs
 
-# Trigger on push to main
+# Scheduled cleanup - runs weekly on Sundays at 2 AM UTC
+# Can also be triggered manually
 on:
-  push:
-    branches:
-      - main
-  workflow_dispatch: {}
+  schedule:
+    - cron: '0 2 * * 0'  # Every Sunday at 2 AM UTC
+  workflow_dispatch:
+    inputs:
+      keep:
+        description: 'Number of log runs to keep'
+        required: false
+        default: '5'
+        type: string
 
 # Prevent overlapping cleanup runs
 concurrency:
@@ -16,31 +22,40 @@ permissions:
   contents: write
 
 env:
-  KEEP: 5          # universal keep value for both jobs; change here to adjust
+  KEEP: ${{ github.event.inputs.keep || '5' }}  # Use manual input or default to 5
 
 jobs:
-  cleanup-ci-logs:
-    name: Cleanup ci-logs branch
+  cleanup-logs:
+    name: Cleanup ${{ matrix.branch }} branch
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false  # Continue cleaning other branch even if one fails
+      matrix:
+        branch: [ci-logs, deploy-logs]
+    
     steps:
-      - name: Checkout ci-logs branch
+      - name: Checkout ${{ matrix.branch }} branch
         uses: actions/checkout@v4
         with:
-          ref: ci-logs
-          fetch-depth: 0
+          ref: ${{ matrix.branch }}
+          fetch-depth: 1
           persist-credentials: true
 
       - name: Cleanup old logs (keep last ${{ env.KEEP }})
         shell: bash
         env:
           KEEP: ${{ env.KEEP }}
-          LOG_DIR: logs/ci   # adjust if your ci logs live elsewhere
+          LOG_DIR: logs/ci
+          BRANCH: ${{ matrix.branch }}
         run: |
           set -euo pipefail
           cd "${GITHUB_WORKSPACE}"
 
+          echo "🧹 Cleaning up $BRANCH branch..."
+          
           if [ ! -d "$LOG_DIR" ]; then
-            echo "No $LOG_DIR found on this branch; nothing to delete."
+            echo "ℹ️  No $LOG_DIR found on $BRANCH branch; nothing to delete."
             exit 0
           fi
 
@@ -50,15 +65,15 @@ jobs:
 
           total=${#dirs[@]}
           keep=${KEEP:-5}
-          echo "Found $total folders; will keep last $keep by numeric name."
+          echo "📊 Found $total log folders; will keep last $keep by numeric name."
 
           if (( total > keep )); then
             remove_count=$(( total - keep ))
-            echo "Deleting $remove_count older folder(s)..."
+            echo "🗑️  Deleting $remove_count older folder(s)..."
             removed=()
             for (( i=0; i<remove_count; i++ )); do
               target="${dirs[i]}"
-              echo "Removing: $target"
+              echo "  ➜ Removing: $target"
               rm -rf -- "$target"
               removed+=("$target")
             done
@@ -68,113 +83,46 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
 
-            # fetch latest and rebase to reduce push conflicts
-            git fetch origin
-            git rebase "origin/ci-logs" || true
-
+            # fetch latest to reduce push conflicts
+            git fetch origin "$BRANCH":"$BRANCH" || git fetch origin
+            
             git add -A -- "$LOG_DIR"
             if ! git diff --cached --quiet; then
-              git commit -m "ci: cleanup older logs - keep last $keep"
-              # retry push a few times in case of race
-              for i in 1 2 3; do
-                if git push origin HEAD:ci-logs; then
-                  echo "Pushed cleanup commit to ci-logs."
+              git commit -m "ci: cleanup older logs on $BRANCH - keep last $keep"
+              
+              # retry push with exponential backoff
+              max_attempts=3
+              for attempt in $(seq 1 $max_attempts); do
+                if git push origin "HEAD:$BRANCH"; then
+                  echo "✅ Pushed cleanup commit to $BRANCH."
                   break
                 else
-                  echo "Push failed, attempt $i. Fetching latest and rebasing..."
-                  git fetch origin
-                  git rebase "origin/ci-logs" || true
-                  sleep $((i * 2))
+                  if [ $attempt -lt $max_attempts ]; then
+                    wait_time=$((attempt * 2))
+                    echo "⚠️  Push failed, attempt $attempt/$max_attempts. Retrying in ${wait_time}s..."
+                    sleep $wait_time
+                    git fetch origin "$BRANCH":"$BRANCH" || git fetch origin
+                    git rebase "origin/$BRANCH" || {
+                      echo "❌ Rebase failed, aborting and retrying..."
+                      git rebase --abort || true
+                    }
+                  else
+                    echo "❌ Failed to push after $max_attempts attempts."
+                    exit 1
+                  fi
                 fi
               done
             else
-              echo "No changes to commit after cleanup."
+              echo "ℹ️  No changes to commit after cleanup."
             fi
 
-            # summary of removed dirs
+            # summary
             if [ ${#removed[@]} -gt 0 ]; then
-              echo "Removed folders: ${removed[*]}"
+              echo ""
+              echo "📋 Summary for $BRANCH:"
+              echo "   Removed ${#removed[@]} folder(s): ${removed[*]}"
+              echo "   Kept last $keep folder(s)"
             fi
           else
-            echo "Nothing to delete (have $total <= keep $keep)."
-          fi
-
-  cleanup-deploy-logs:
-    name: Cleanup deploy-logs branch
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout deploy-logs branch
-        uses: actions/checkout@v4
-        with:
-          ref: deploy-logs
-          fetch-depth: 0
-          persist-credentials: true
-
-      - name: Cleanup old logs (keep last ${{ env.KEEP }})
-        shell: bash
-        env:
-          KEEP: ${{ env.KEEP }}
-          LOG_DIR: logs/ci   # adjust if your deploy logs live in a different folder
-        run: |
-          set -euo pipefail
-          cd "${GITHUB_WORKSPACE}"
-
-          if [ ! -d "$LOG_DIR" ]; then
-            echo "No $LOG_DIR found on this branch; nothing to delete."
-            exit 0
-          fi
-
-          cd "$LOG_DIR" || exit 0
-          shopt -s nullglob
-          mapfile -t dirs < <(for d in */; do printf '%s\n' "${d%/}"; done | sort -n)
-
-          total=${#dirs[@]}
-          keep=${KEEP:-5}
-          echo "Found $total folders; will keep last $keep by numeric name."
-
-          if (( total > keep )); then
-            remove_count=$(( total - keep ))
-            echo "Deleting $remove_count older folder(s)..."
-            removed=()
-            for (( i=0; i<remove_count; i++ )); do
-              target="${dirs[i]}"
-              echo "Removing: $target"
-              rm -rf -- "$target"
-              removed+=("$target")
-            done
-
-            # prepare git commit
-            cd "$GITHUB_WORKSPACE"
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-
-            # fetch latest and rebase to reduce push conflicts
-            git fetch origin
-            git rebase "origin/deploy-logs" || true
-
-            git add -A -- "$LOG_DIR"
-            if ! git diff --cached --quiet; then
-              git commit -m "ci: cleanup older logs - keep last $keep"
-              # retry push a few times in case of race
-              for i in 1 2 3; do
-                if git push origin HEAD:deploy-logs; then
-                  echo "Pushed cleanup commit to deploy-logs."
-                  break
-                else
-                  echo "Push failed, attempt $i. Fetching latest and rebasing..."
-                  git fetch origin
-                  git rebase "origin/deploy-logs" || true
-                  sleep $((i * 2))
-                fi
-              done
-            else
-              echo "No changes to commit after cleanup."
-            fi
-
-            # summary of removed dirs
-            if [ ${#removed[@]} -gt 0 ]; then
-              echo "Removed folders: ${removed[*]}"
-            fi
-          else
-            echo "Nothing to delete (have $total <= keep $keep)."
+            echo "✅ Nothing to delete (have $total <= keep $keep)."
           fi
