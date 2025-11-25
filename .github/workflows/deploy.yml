@@ -158,22 +158,11 @@ jobs:
 
 
 
-              # Check if build folder exists
-      - name: Check frontend build exists
-        id: check_frontend
-        run: |
-            if [ -d "frontend/build" ]; then
-              echo "has=true" >> "$GITHUB_OUTPUT"
-            else
-              echo "has=false" >> "$GITHUB_OUTPUT"
-            fi
-
-        # Upload only if build exists
-      - name: Upload Pages artifact (frontend/build)
-        if: steps.check_frontend.outputs.has == 'true'
+      # 3) UPLOAD ARTIFACT FOR PAGES DEPLOY 
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v4
         with:
-            path: frontend/build
+          path: ./frontend/build
 
   deploy:
     runs-on: ubuntu-latest
