@@ -112,50 +112,12 @@ jobs:
           git commit -m "Add deploy logs for run ${GITHUB_RUN_NUMBER}"
           git push origin deploy-logs
           
-      - name: Checkout deploy-logs branch
-        uses: actions/checkout@v4
-        with:
-            repository: ${{ github.repository }}
-            ref: deploy-logs
-            persist-credentials: true
-            fetch-depth: 0
-
-      - name: Cleanup old deploy logs and push (keep last 5)
+      - name: Cleanup old logs (keep last 5)
         if: always()
         shell: bash
-        env:
-            KEEP: 5
         run: |
-            set -euo pipefail
-            cd "${GITHUB_WORKSPACE}/logs/ci" || { echo "logs/ci not found"; exit 0; }
-            shopt -s nullglob
-            mapfile -t dirs < <(for d in */; do printf '%s\n' "${d%/}"; done | sort -n)
-            total=${#dirs[@]}
-            keep=${KEEP:-5}
-            echo "Found $total folders; will keep last $keep by numeric name."
-            if (( total > keep )); then
-              remove_count=$(( total - keep ))
-              echo "Deleting $remove_count older folder(s)..."
-              for (( i=0; i<remove_count; i++ )); do
-                target="${dirs[i]}"
-                echo "Removing: $target"
-                rm -rf -- "$target"
-              done
-              cd "${GITHUB_WORKSPACE}"
-              git config user.name "github-actions[bot]"
-              git config user.email "github-actions[bot]@users.noreply.github.com"
-              git add -A -- "logs/ci"
-              if ! git diff --cached --quiet; then
-                git commit -m "ci: cleanup older deploy logs - keep last $keep"
-                git push origin HEAD:deploy-logs
-                echo "Pushed cleanup commit to deploy-logs."
-              else
-                echo "No changes to commit after cleanup."
-              fi
-            else
-              echo "Nothing to delete (have $total <= keep $keep)."
-            fi
-
+          cd logs/ci || exit 0
+          ls -1 | sort -n | head -n -5 | xargs -r rm -rf
 
 
       # 3) UPLOAD ARTIFACT FOR PAGES DEPLOY 
