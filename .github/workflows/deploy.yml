@@ -175,8 +175,8 @@ jobs:
               # commit only if there are staged changes
               if ! git diff --cached --quiet; then
                 git commit -m "ci: cleanup older logs - keep last $keep"
-                git push origin HEAD:ci-logs
-                echo "Pushed cleanup commit to ci-logs."
+                git push origin HEAD:deploy-logs
+                echo "Pushed cleanup commit to deploy-logs."
               else
                 echo "No changes to commit after cleanup."
               fi
