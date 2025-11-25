@@ -92,6 +92,28 @@ jobs:
           mv "$CLEAN_LOG" "$LOG_FILE" || true
           echo "ANSI-stripped log saved back to $LOG_FILE"
 
+      # 1.5) CREATE TEST SUMMARY JSON
+      - name: Create test summary JSON
+        if: always()
+        working-directory: ./frontend
+        shell: bash
+        run: |
+          LOG_DIR="../logs/ci/${GITHUB_RUN_NUMBER}"
+          
+          # Find the test log file
+          LOG_FILE=$(ls "$LOG_DIR"/test-*.log 2>/dev/null | head -n 1)
+          
+          if [ -z "$LOG_FILE" ]; then
+            echo "No log file found in $LOG_DIR"
+            exit 0
+          fi
+          
+          echo "Creating summary for: $LOG_FILE"
+          node ../scripts/create-test-summary.js "$LOG_FILE" "$LOG_DIR" "${GITHUB_RUN_NUMBER}"
+          
+          # Create latest.json to track most recent build
+          echo "{\"latestBuild\":${GITHUB_RUN_NUMBER},\"timestamp\":\"$(date -u +"%Y-%m-%dT%H:%M:%SZ")\"}" > "../logs/ci/latest.json"
+
       # 2) PUSH ONLY LOGS TO ci-logs (TEMP REPO TRICK - OPTIMIZED)
       - name: Push logs to ci-logs branch (logs-only, keep history)
         if: always()
@@ -135,11 +157,17 @@ jobs:
           # Copy ONLY this run's logs into the repo, preserving older runs
           mkdir -p logs/ci
           cp -r "../${RUN_LOG_DIR}" "logs/ci/"
+          
+          # Copy latest.json if it exists
+          if [ -f "../logs/ci/latest.json" ]; then
+            cp "../logs/ci/latest.json" "logs/ci/"
+          fi
 
           echo "Logs in temp repo before commit:"
           ls -R logs || echo "No logs in temp repo"
 
           git add "logs/ci/${GITHUB_RUN_NUMBER}" || true
+          git add "logs/ci/latest.json" || true
 
           if git diff --cached --quiet; then
             echo "No log changes to commit"
