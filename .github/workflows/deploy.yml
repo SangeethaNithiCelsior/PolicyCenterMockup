@@ -116,8 +116,28 @@ jobs:
         if: always()
         shell: bash
         run: |
-          cd logs/ci || exit 0
-          ls -1 | sort -n | head -n -5 | xargs -r rm -rf
+            cd logs/ci || exit 0
+
+            # enable nullglob so pattern expands to nothing if no matches
+            shopt -s nullglob
+
+            # read directories (strip trailing slash), sort numerically
+            mapfile -t dirs < <(for d in */; do printf '%s\n' "${d%/}"; done | sort -n)
+
+            keep=5
+            count=${#dirs[@]}
+
+            if (( count > keep )); then
+              remove_count=$((count - keep))
+              echo "Keeping last $keep logs, deleting $remove_count older folders..."
+              for ((i=0; i<remove_count; i++)); do
+                dir="${dirs[i]}"
+                echo "Removing: $dir"
+                rm -rf -- "$dir"
+              done
+            else
+              echo "Nothing to delete (have $count folders, keep=$keep)."
+            fi
 
 
       # 3) UPLOAD ARTIFACT FOR PAGES DEPLOY 
