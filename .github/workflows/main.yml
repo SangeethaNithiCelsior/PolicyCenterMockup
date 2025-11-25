@@ -11,34 +11,23 @@ permissions:
   contents: write
 
 jobs:
-  build-and-test:
+  test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 1
           persist-credentials: true
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-
-      - name: Cache npm (frontend)
-        uses: actions/cache@v3
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('frontend/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
-
-      - name: Clean environment (frontend)
-        working-directory: ./frontend
-        run: |
-          rm -rf node_modules
-          npm cache clean --force
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
 
       - name: Install dependencies (frontend)
         working-directory: ./frontend
@@ -103,9 +92,10 @@ jobs:
           mv "$CLEAN_LOG" "$LOG_FILE" || true
           echo "ANSI-stripped log saved back to $LOG_FILE"
 
-      # 2) PUSH ONLY LOGS TO ci-logs (TEMP REPO TRICK)
+      # 2) PUSH ONLY LOGS TO ci-logs (TEMP REPO TRICK - OPTIMIZED)
       - name: Push logs to ci-logs branch (logs-only, keep history)
         if: always()
+        timeout-minutes: 5
         env:
           REPO: ${{ github.repository }}
           TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -127,15 +117,15 @@ jobs:
           mkdir "$TEMP_REPO"
           cd "$TEMP_REPO"
 
-          # Clone only the ci-logs branch if it exists, otherwise start fresh
+          # Clone only the ci-logs branch with minimal depth
           git init
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git remote add origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
 
           if git ls-remote --exit-code origin refs/heads/ci-logs > /dev/null 2>&1; then
-            echo "ci-logs branch exists, fetching it..."
-            git fetch origin ci-logs
+            echo "ci-logs branch exists, fetching it with depth 1..."
+            git fetch --depth=1 origin ci-logs
             git checkout -b ci-logs origin/ci-logs
           else
             echo "ci-logs branch does not exist, creating new."
@@ -182,7 +172,41 @@ jobs:
 
           echo "Tests passed, continuing."
 
-      # 4) ONLY BUILD IF TESTS PASSED
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: 'frontend/package-lock.json'
+
+      - name: Install dependencies (frontend)
+        working-directory: ./frontend
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --legacy-peer-deps
+          else
+            npm install --legacy-peer-deps
+          fi
+
+      - name: Cache build output
+        uses: actions/cache@v4
+        with:
+          path: frontend/build
+          key: ${{ runner.os }}-build-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
       - name: Build the app (frontend)
         working-directory: ./frontend
         env:
