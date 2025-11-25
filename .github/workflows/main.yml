@@ -160,7 +160,7 @@ jobs:
           git push origin ci-logs
           
 
-      # 3) FAIL THE JOB IF TESTS FAILED (AFTER LOGS ARE PUSHED) 
+      # 3) FAIL THE JOB IF TESTS FAILED (AFTER LOGS ARE PUSHED)
       - name: Fail job if tests failed
         shell: bash
         run: |
