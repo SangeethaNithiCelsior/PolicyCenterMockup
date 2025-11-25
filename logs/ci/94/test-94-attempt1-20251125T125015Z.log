@@ -1,0 +1,2228 @@
+
+> frontend@0.1.0 test:ci
+> react-scripts test --coverage --watchAll=false --ci
+
+FAIL src/components/Navbar/Navbar.test.js
+  ● Navbar Component › applies correct id to navbar
+
+    TestingLibraryElementError: Unable to find an element by: [data-testid="test-navbar"]
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          class="navbar"
+          id="test-navbar"
+        >
+          <div
+            class="navTabs"
+            id="nav-tabs"
+          >
+            <button
+              class="navTab activeTab"
+              id="desktop-button"
+            >
+              Desktop
+            </button>
+            <div
+              class="dropdown"
+              id="account-tab"
+            >
+              <button
+                class="navTab "
+                id="account-button"
+              >
+                Account
+                 ▼
+              </button>
+            </div>
+            <div
+              class="dropdown"
+              id="submission-tab"
+            >
+              <button
+                class="navTab "
+                id="submission-button"
+              >
+                Submission
+                 ▼
+              </button>
+            </div>
+            <button
+              class="navTab "
+              id="contact-button"
+            >
+              Contact
+            </button>
+            <button
+              class="navTab "
+              id="search-button"
+            >
+              Search
+            </button>
+            <button
+              class="navTab "
+              id="administration-button"
+            >
+              Administration
+            </button>
+          </div>
+          <button
+            class="logoutButton"
+            id="logout-button"
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </body>
+
+      150 |   test('applies correct id to navbar', () => {
+      151 |     render(<Navbar {...defaultProps} />);
+    > 152 |     const navbar = screen.getByTestId('test-navbar') || document.getElementById('test-navbar');
+          |                           ^
+      153 |     expect(navbar).toBeInTheDocument();
+      154 |   });
+      155 |
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at getByTestId (node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at Object.<anonymous> (src/components/Navbar/Navbar.test.js:152:27)
+
+FAIL src/pages/Desktop/DesktopPage.test.js
+  ● Console
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+      20 |
+      21 |   const renderDesktopPage = () => {
+    > 22 |     return render(
+         |                  ^
+      23 |       <MemoryRouter>
+      24 |         <DesktopPage />
+      25 |       </MemoryRouter>
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at logV6DeprecationWarnings (node_modules/react-router/lib/deprecations.ts:26:5)
+      at node_modules/react-router/lib/components.tsx:257:25
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderDesktopPage (src/pages/Desktop/DesktopPage.test.js:22:18)
+      at Object.<anonymous> (src/pages/Desktop/DesktopPage.test.js:30:5)
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+      20 |
+      21 |   const renderDesktopPage = () => {
+    > 22 |     return render(
+         |                  ^
+      23 |       <MemoryRouter>
+      24 |         <DesktopPage />
+      25 |       </MemoryRouter>
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at logV6DeprecationWarnings (node_modules/react-router/lib/deprecations.ts:37:5)
+      at node_modules/react-router/lib/components.tsx:257:25
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderDesktopPage (src/pages/Desktop/DesktopPage.test.js:22:18)
+      at Object.<anonymous> (src/pages/Desktop/DesktopPage.test.js:30:5)
+
+  ● DesktopPage Component › navigates to create account page when New Account is clicked
+
+    TestingLibraryElementError: Found multiple elements with the role "button" and name `/account/i`
+
+    Here are the matching elements:
+
+    Ignored nodes: comments, script, style
+    <button
+      class="navTab "
+      id="account-button"
+    >
+      Account
+       ▼
+    </button>
+
+    Ignored nodes: comments, script, style
+    <button
+      class="sidebarItem "
+      id="sidebar-item-my-accounts"
+    >
+      My Accounts
+    </button>
+
+    (If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          class="desktopContainer"
+          id="desktop-container"
+        >
+          <div
+            class="topBar"
+            id="top-bar"
+          >
+            <div
+              class="appName"
+              id="app-name"
+            >
+              PolicyMaster
+            </div>
+            <div
+              class="navbar"
+              id="navbar"
+            >
+              <div
+                class="navTabs"
+                id="nav-tabs"
+              >
+                <button
+                  class="navTab activeTab"
+                  id="desktop-button"
+                >
+                  Desktop
+                </button>
+                <div
+                  class="dropdown"
+                  id="account-tab"
+                >
+                  <button
+                    class="navTab "
+                    id="account-button"
+                  >
+                    Account
+                     ▼
+                  </button>
+                </div>
+                <div
+                  class="dropdown"
+                  id="submission-tab"
+                >
+                  <button
+                    class="navTab "
+                    id="submission-button"
+                  >
+                    Submission
+                     ▼
+                  </button>
+                </div>
+                <button
+                  class="navTab "
+                  id="contact-button"
+                >
+                  Contact
+                </button>
+                <button
+                  class="navTab "
+                  id="search-button"
+                >
+                  Search
+                </button>
+                <button
+                  class="navTab "
+                  id="administration-button"
+                >
+                  Administration
+                </button>
+              </div>
+              <button
+                class="logoutButton"
+                id="logout-button"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+          <div
+            class="contentLayout"
+            id="content-layout"
+          >
+            <div
+              class="sidebar"
+              id="sidebar-container"
+            >
+              <button
+                class="sidebarItem "
+                id="sidebar-item-actions"
+              >
+                Actions
+              </button>
+              <button
+                class="sidebarItem activeItem"
+                id="sidebar-item-summary"
+              >
+                Summary
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-activities"
+              >
+                My Activities
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-accounts"
+              >
+                My Accounts
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-submissions"
+              >
+                My Submissions
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-renewals"
+              >
+                My Renewals
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-audits"
+              >
+                Audits
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-other-policy-transaction"
+              >
+                Other Policy Transaction
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-queues"
+              >
+                My Queues
+              </button>
+            </div>
+            <div
+              class="mainContent"
+              id="main-content"
+            >
+              <h1
+                id="summary-title"
+              >
+                My Summary
+              </h1>
+              <p
+                id="summary-description"
+              >
+                Welcome to your Desktop page! Here, you can view your summary.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      78 |     
+      79 |     // Hover over Account to show dropdown
+    > 80 |     const accountTab = screen.getByRole('button', { name: /account/i });
+         |                               ^
+      81 |     fireEvent.mouseEnter(accountTab.parentElement);
+      82 |     
+      83 |     // Wait for dropdown to appear and click New Account
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at getElementError (node_modules/@testing-library/dom/dist/query-helpers.js:20:35)
+      at getMultipleElementsFoundError (node_modules/@testing-library/dom/dist/query-helpers.js:23:10)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+      at getByRole (node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at Object.<anonymous> (src/pages/Desktop/DesktopPage.test.js:80:31)
+
+  ● DesktopPage Component › navigates to new submission page when New Submission is clicked
+
+    TestingLibraryElementError: Found multiple elements with the role "button" and name `/submission/i`
+
+    Here are the matching elements:
+
+    Ignored nodes: comments, script, style
+    <button
+      class="navTab "
+      id="submission-button"
+    >
+      Submission
+       ▼
+    </button>
+
+    Ignored nodes: comments, script, style
+    <button
+      class="sidebarItem "
+      id="sidebar-item-my-submissions"
+    >
+      My Submissions
+    </button>
+
+    (If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          class="desktopContainer"
+          id="desktop-container"
+        >
+          <div
+            class="topBar"
+            id="top-bar"
+          >
+            <div
+              class="appName"
+              id="app-name"
+            >
+              PolicyMaster
+            </div>
+            <div
+              class="navbar"
+              id="navbar"
+            >
+              <div
+                class="navTabs"
+                id="nav-tabs"
+              >
+                <button
+                  class="navTab activeTab"
+                  id="desktop-button"
+                >
+                  Desktop
+                </button>
+                <div
+                  class="dropdown"
+                  id="account-tab"
+                >
+                  <button
+                    class="navTab "
+                    id="account-button"
+                  >
+                    Account
+                     ▼
+                  </button>
+                </div>
+                <div
+                  class="dropdown"
+                  id="submission-tab"
+                >
+                  <button
+                    class="navTab "
+                    id="submission-button"
+                  >
+                    Submission
+                     ▼
+                  </button>
+                </div>
+                <button
+                  class="navTab "
+                  id="contact-button"
+                >
+                  Contact
+                </button>
+                <button
+                  class="navTab "
+                  id="search-button"
+                >
+                  Search
+                </button>
+                <button
+                  class="navTab "
+                  id="administration-button"
+                >
+                  Administration
+                </button>
+              </div>
+              <button
+                class="logoutButton"
+                id="logout-button"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+          <div
+            class="contentLayout"
+            id="content-layout"
+          >
+            <div
+              class="sidebar"
+              id="sidebar-container"
+            >
+              <button
+                class="sidebarItem "
+                id="sidebar-item-actions"
+              >
+                Actions
+              </button>
+              <button
+                class="sidebarItem activeItem"
+                id="sidebar-item-summary"
+              >
+                Summary
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-activities"
+              >
+                My Activities
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-accounts"
+              >
+                My Accounts
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-submissions"
+              >
+                My Submissions
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-renewals"
+              >
+                My Renewals
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-audits"
+              >
+                Audits
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-other-policy-transaction"
+              >
+                Other Policy Transaction
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-queues"
+              >
+                My Queues
+              </button>
+            </div>
+            <div
+              class="mainContent"
+              id="main-content"
+            >
+              <h1
+                id="summary-title"
+              >
+                My Summary
+              </h1>
+              <p
+                id="summary-description"
+              >
+                Welcome to your Desktop page! Here, you can view your summary.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      92 |     
+      93 |     // Hover over Submission to show dropdown
+    > 94 |     const submissionTab = screen.getByRole('button', { name: /submission/i });
+         |                                  ^
+      95 |     fireEvent.mouseEnter(submissionTab.parentElement);
+      96 |     
+      97 |     // Wait for dropdown to appear and click New Submission
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at getElementError (node_modules/@testing-library/dom/dist/query-helpers.js:20:35)
+      at getMultipleElementsFoundError (node_modules/@testing-library/dom/dist/query-helpers.js:23:10)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+      at getByRole (node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at Object.<anonymous> (src/pages/Desktop/DesktopPage.test.js:94:34)
+
+  ● DesktopPage Component › handles Account tab click without dropdown action
+
+    TestingLibraryElementError: Found multiple elements with the role "button" and name `/account/i`
+
+    Here are the matching elements:
+
+    Ignored nodes: comments, script, style
+    <button
+      class="navTab "
+      id="account-button"
+    >
+      Account
+       ▼
+    </button>
+
+    Ignored nodes: comments, script, style
+    <button
+      class="sidebarItem "
+      id="sidebar-item-my-accounts"
+    >
+      My Accounts
+    </button>
+
+    (If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          class="desktopContainer"
+          id="desktop-container"
+        >
+          <div
+            class="topBar"
+            id="top-bar"
+          >
+            <div
+              class="appName"
+              id="app-name"
+            >
+              PolicyMaster
+            </div>
+            <div
+              class="navbar"
+              id="navbar"
+            >
+              <div
+                class="navTabs"
+                id="nav-tabs"
+              >
+                <button
+                  class="navTab activeTab"
+                  id="desktop-button"
+                >
+                  Desktop
+                </button>
+                <div
+                  class="dropdown"
+                  id="account-tab"
+                >
+                  <button
+                    class="navTab "
+                    id="account-button"
+                  >
+                    Account
+                     ▼
+                  </button>
+                </div>
+                <div
+                  class="dropdown"
+                  id="submission-tab"
+                >
+                  <button
+                    class="navTab "
+                    id="submission-button"
+                  >
+                    Submission
+                     ▼
+                  </button>
+                </div>
+                <button
+                  class="navTab "
+                  id="contact-button"
+                >
+                  Contact
+                </button>
+                <button
+                  class="navTab "
+                  id="search-button"
+                >
+                  Search
+                </button>
+                <button
+                  class="navTab "
+                  id="administration-button"
+                >
+                  Administration
+                </button>
+              </div>
+              <button
+                class="logoutButton"
+                id="logout-button"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+          <div
+            class="contentLayout"
+            id="content-layout"
+          >
+            <div
+              class="sidebar"
+              id="sidebar-container"
+            >
+              <button
+                class="sidebarItem "
+                id="sidebar-item-actions"
+              >
+                Actions
+              </button>
+              <button
+                class="sidebarItem activeItem"
+                id="sidebar-item-summary"
+              >
+                Summary
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-activities"
+              >
+                My Activities
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-accounts"
+              >
+                My Accounts
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-submissions"
+              >
+                My Submissions
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-renewals"
+              >
+                My Renewals
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-audits"
+              >
+                Audits
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-other-policy-transaction"
+              >
+                Other Policy Transaction
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-queues"
+              >
+                My Queues
+              </button>
+            </div>
+            <div
+              class="mainContent"
+              id="main-content"
+            >
+              <h1
+                id="summary-title"
+              >
+                My Summary
+              </h1>
+              <p
+                id="summary-description"
+              >
+                Welcome to your Desktop page! Here, you can view your summary.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      174 |     renderDesktopPage();
+      175 |     
+    > 176 |     const accountTab = screen.getByRole('button', { name: /account/i });
+          |                               ^
+      177 |     fireEvent.click(accountTab);
+      178 |     
+      179 |     // Account tab click should not trigger navigation or alert
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at getElementError (node_modules/@testing-library/dom/dist/query-helpers.js:20:35)
+      at getMultipleElementsFoundError (node_modules/@testing-library/dom/dist/query-helpers.js:23:10)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+      at getByRole (node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at Object.<anonymous> (src/pages/Desktop/DesktopPage.test.js:176:31)
+
+  ● DesktopPage Component › handles Submission tab click without dropdown action
+
+    TestingLibraryElementError: Found multiple elements with the role "button" and name `/submission/i`
+
+    Here are the matching elements:
+
+    Ignored nodes: comments, script, style
+    <button
+      class="navTab "
+      id="submission-button"
+    >
+      Submission
+       ▼
+    </button>
+
+    Ignored nodes: comments, script, style
+    <button
+      class="sidebarItem "
+      id="sidebar-item-my-submissions"
+    >
+      My Submissions
+    </button>
+
+    (If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          class="desktopContainer"
+          id="desktop-container"
+        >
+          <div
+            class="topBar"
+            id="top-bar"
+          >
+            <div
+              class="appName"
+              id="app-name"
+            >
+              PolicyMaster
+            </div>
+            <div
+              class="navbar"
+              id="navbar"
+            >
+              <div
+                class="navTabs"
+                id="nav-tabs"
+              >
+                <button
+                  class="navTab activeTab"
+                  id="desktop-button"
+                >
+                  Desktop
+                </button>
+                <div
+                  class="dropdown"
+                  id="account-tab"
+                >
+                  <button
+                    class="navTab "
+                    id="account-button"
+                  >
+                    Account
+                     ▼
+                  </button>
+                </div>
+                <div
+                  class="dropdown"
+                  id="submission-tab"
+                >
+                  <button
+                    class="navTab "
+                    id="submission-button"
+                  >
+                    Submission
+                     ▼
+                  </button>
+                </div>
+                <button
+                  class="navTab "
+                  id="contact-button"
+                >
+                  Contact
+                </button>
+                <button
+                  class="navTab "
+                  id="search-button"
+                >
+                  Search
+                </button>
+                <button
+                  class="navTab "
+                  id="administration-button"
+                >
+                  Administration
+                </button>
+              </div>
+              <button
+                class="logoutButton"
+                id="logout-button"
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+          <div
+            class="contentLayout"
+            id="content-layout"
+          >
+            <div
+              class="sidebar"
+              id="sidebar-container"
+            >
+              <button
+                class="sidebarItem "
+                id="sidebar-item-actions"
+              >
+                Actions
+              </button>
+              <button
+                class="sidebarItem activeItem"
+                id="sidebar-item-summary"
+              >
+                Summary
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-activities"
+              >
+                My Activities
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-accounts"
+              >
+                My Accounts
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-submissions"
+              >
+                My Submissions
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-renewals"
+              >
+                My Renewals
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-audits"
+              >
+                Audits
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-other-policy-transaction"
+              >
+                Other Policy Transaction
+              </button>
+              <button
+                class="sidebarItem "
+                id="sidebar-item-my-queues"
+              >
+                My Queues
+              </button>
+            </div>
+            <div
+              class="mainContent"
+              id="main-content"
+            >
+              <h1
+                id="summary-title"
+              >
+                My Summary
+              </h1>
+              <p
+                id="summary-description"
+              >
+                Welcome to your Desktop page! Here, you can view your summary.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      185 |     renderDesktopPage();
+      186 |     
+    > 187 |     const submissionTab = screen.getByRole('button', { name: /submission/i });
+          |                                  ^
+      188 |     fireEvent.click(submissionTab);
+      189 |     
+      190 |     // Submission tab click should not trigger navigation or alert
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at getElementError (node_modules/@testing-library/dom/dist/query-helpers.js:20:35)
+      at getMultipleElementsFoundError (node_modules/@testing-library/dom/dist/query-helpers.js:23:10)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+      at getByRole (node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at Object.<anonymous> (src/pages/Desktop/DesktopPage.test.js:187:34)
+
+PASS src/components/Sidebar/Sidebar.test.js
+FAIL src/routes/AppRoutes.test.js
+  ● Console
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+      37 | describe('AppRoutes Component', () => {
+      38 |   const renderWithRouter = (initialEntries = ['/']) => {
+    > 39 |     return render(
+         |                  ^
+      40 |       <MemoryRouter initialEntries={initialEntries}>
+      41 |         <AppRoutes />
+      42 |       </MemoryRouter>
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at logV6DeprecationWarnings (node_modules/react-router/lib/deprecations.ts:26:5)
+      at node_modules/react-router/lib/components.tsx:257:25
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderWithRouter (src/routes/AppRoutes.test.js:39:18)
+      at Object.<anonymous> (src/routes/AppRoutes.test.js:47:5)
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+      37 | describe('AppRoutes Component', () => {
+      38 |   const renderWithRouter = (initialEntries = ['/']) => {
+    > 39 |     return render(
+         |                  ^
+      40 |       <MemoryRouter initialEntries={initialEntries}>
+      41 |         <AppRoutes />
+      42 |       </MemoryRouter>
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at logV6DeprecationWarnings (node_modules/react-router/lib/deprecations.ts:37:5)
+      at node_modules/react-router/lib/components.tsx:257:25
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderWithRouter (src/routes/AppRoutes.test.js:39:18)
+      at Object.<anonymous> (src/routes/AppRoutes.test.js:47:5)
+
+  ● AppRoutes Component › handles navigation between routes
+
+    TestingLibraryElementError: Unable to find an element by: [data-testid="desktop-page"]
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          data-testid="login-page"
+        >
+          Login Page
+        </div>
+      </div>
+    </body>
+
+      94 |       </MemoryRouter>
+      95 |     );
+    > 96 |     expect(screen.getByTestId('desktop-page')).toBeInTheDocument();
+         |                   ^
+      97 |     expect(screen.queryByTestId('login-page')).not.toBeInTheDocument();
+      98 |   });
+      99 |
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:76:38
+      at node_modules/@testing-library/dom/dist/query-helpers.js:52:17
+      at getByTestId (node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at Object.<anonymous> (src/routes/AppRoutes.test.js:96:19)
+
+  ● AppRoutes Component › all route paths are case sensitive
+
+    expect(element).not.toBeInTheDocument()
+
+    expected document not to contain element, found <div data-testid="desktop-page">Desktop Page</div> instead
+
+      121 |     
+      122 |     // Should not match /desktop (case sensitive)
+    > 123 |     expect(screen.queryByTestId('desktop-page')).not.toBeInTheDocument();
+          |                                                      ^
+      124 |   });
+      125 |
+      126 |   test('exact path matching works correctly', () => {
+
+      at Object.<anonymous> (src/routes/AppRoutes.test.js:123:54)
+
+PASS src/components/Button/Button.test.js
+PASS src/config/config.test.js
+PASS src/App.test.js
+  ● Console
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+      14 | describe('App Component', () => {
+      15 |   test('renders without crashing', () => {
+    > 16 |     render(
+         |           ^
+      17 |       <MemoryRouter>
+      18 |         <App />
+      19 |       </MemoryRouter>
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at logV6DeprecationWarnings (node_modules/react-router/lib/deprecations.ts:26:5)
+      at node_modules/react-router/lib/components.tsx:257:25
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (src/App.test.js:16:11)
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+      14 | describe('App Component', () => {
+      15 |   test('renders without crashing', () => {
+    > 16 |     render(
+         |           ^
+      17 |       <MemoryRouter>
+      18 |         <App />
+      19 |       </MemoryRouter>
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at logV6DeprecationWarnings (node_modules/react-router/lib/deprecations.ts:37:5)
+      at node_modules/react-router/lib/components.tsx:257:25
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at Object.<anonymous> (src/App.test.js:16:11)
+
+FAIL src/tests/integration.test.js
+  ● Console
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+      22 |
+      23 |   const renderApp = (initialEntries = ['/']) => {
+    > 24 |     return render(
+         |                  ^
+      25 |       <MemoryRouter initialEntries={initialEntries}>
+      26 |         <App />
+      27 |       </MemoryRouter>
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at logV6DeprecationWarnings (node_modules/react-router/lib/deprecations.ts:26:5)
+      at node_modules/react-router/lib/components.tsx:257:25
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderApp (src/tests/integration.test.js:24:18)
+      at Object.<anonymous> (src/tests/integration.test.js:33:7)
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+      22 |
+      23 |   const renderApp = (initialEntries = ['/']) => {
+    > 24 |     return render(
+         |                  ^
+      25 |       <MemoryRouter initialEntries={initialEntries}>
+      26 |         <App />
+      27 |       </MemoryRouter>
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at logV6DeprecationWarnings (node_modules/react-router/lib/deprecations.ts:37:5)
+      at node_modules/react-router/lib/components.tsx:257:25
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderApp (src/tests/integration.test.js:24:18)
+      at Object.<anonymous> (src/tests/integration.test.js:33:7)
+
+  ● App Integration Tests › Login Flow › login with invalid credentials shows error
+
+    Unable to find an element with the text: /your username or password may be incorrect/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div>
+          <div
+            class="desktopContainer"
+            id="desktop-container"
+          >
+            <div
+              class="topBar"
+              id="top-bar"
+            >
+              <div
+                class="appName"
+                id="app-name"
+              >
+                PolicyMaster
+              </div>
+              <div
+                class="navbar"
+                id="navbar"
+              >
+                <div
+                  class="navTabs"
+                  id="nav-tabs"
+                >
+                  <button
+                    class="navTab activeTab"
+                    id="desktop-button"
+                  >
+                    Desktop
+                  </button>
+                  <div
+                    class="dropdown"
+                    id="account-tab"
+                  >
+                    <button
+                      class="navTab "
+                      id="account-button"
+                    >
+                      Account
+                       ▼
+                    </button>
+                  </div>
+                  <div
+                    class="dropdown"
+                    id="submission-tab"
+                  >
+                    <button
+                      class="navTab "
+                      id="submission-button"
+                    >
+                      Submission
+                       ▼
+                    </button>
+                  </div>
+                  <button
+                    class="navTab "
+                    id="contact-button"
+                  >
+                    Contact
+                  </button>
+                  <button
+                    class="navTab "
+                    id="search-button"
+                  >
+                    Search
+                  </button>
+                  <button
+                    class="navTab "
+                    id="administration-button"
+                  >
+                    Administration
+                  </button>
+                </div>
+                <button
+                  class="logoutButton"
+                  id="logout-button"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+            <div
+              class="contentLayout"
+              id="content-layout"
+            >
+              <div
+                class="sidebar"
+                id="sidebar-container"
+              >
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-actions"
+                >
+                  Actions
+                </button>
+                <button
+                  class="sidebarItem activeItem"
+                  id="sidebar-item-summary"
+                >
+                  Summary
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-activities"
+                >
+                  My Activities
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-accounts"
+                >
+                  My Accounts
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-submissions"
+                >
+                  My Submissions
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-renewals"
+                >
+                  My Renewals
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-audits"
+                >
+                  Audits
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-other-policy-transaction"
+                >
+                  Other Policy Transaction
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-queues"
+                >
+                  My Queues
+                </button>
+              </div>
+              <div
+                class="mainContent"
+                id="main-content"
+              >
+                <h1
+                  id="summary-title"
+                >
+                  My Summary
+                </h1>
+                <p
+                  id="summary-description"
+                >
+                  Welcome to your Desktop page! Here, you can view your summary.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      65 |       fireEvent.click(loginButton);
+      66 |       
+    > 67 |       await waitFor(() => {
+         |                    ^
+      68 |         expect(screen.getByText(/your username or password may be incorrect/i)).toBeInTheDocument();
+      69 |       });
+      70 |       
+
+      at waitForWrapper (node_modules/@testing-library/dom/dist/wait-for.js:163:27)
+      at Object.<anonymous> (src/tests/integration.test.js:67:20)
+
+  ● App Integration Tests › Navigation Flow › navigation from desktop to create account page
+
+    TestingLibraryElementError: Found multiple elements with the role "button" and name `/account/i`
+
+    Here are the matching elements:
+
+    Ignored nodes: comments, script, style
+    <button
+      class="navTab "
+      id="account-button"
+    >
+      Account
+       ▼
+    </button>
+
+    Ignored nodes: comments, script, style
+    <button
+      class="sidebarItem "
+      id="sidebar-item-my-accounts"
+    >
+      My Accounts
+    </button>
+
+    (If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div>
+          <div
+            class="desktopContainer"
+            id="desktop-container"
+          >
+            <div
+              class="topBar"
+              id="top-bar"
+            >
+              <div
+                class="appName"
+                id="app-name"
+              >
+                PolicyMaster
+              </div>
+              <div
+                class="navbar"
+                id="navbar"
+              >
+                <div
+                  class="navTabs"
+                  id="nav-tabs"
+                >
+                  <button
+                    class="navTab activeTab"
+                    id="desktop-button"
+                  >
+                    Desktop
+                  </button>
+                  <div
+                    class="dropdown"
+                    id="account-tab"
+                  >
+                    <button
+                      class="navTab "
+                      id="account-button"
+                    >
+                      Account
+                       ▼
+                    </button>
+                  </div>
+                  <div
+                    class="dropdown"
+                    id="submission-tab"
+                  >
+                    <button
+                      class="navTab "
+                      id="submission-button"
+                    >
+                      Submission
+                       ▼
+                    </button>
+                  </div>
+                  <button
+                    class="navTab "
+                    id="contact-button"
+                  >
+                    Contact
+                  </button>
+                  <button
+                    class="navTab "
+                    id="search-button"
+                  >
+                    Search
+                  </button>
+                  <button
+                    class="navTab "
+                    id="administration-button"
+                  >
+                    Administration
+                  </button>
+                </div>
+                <button
+                  class="logoutButton"
+                  id="logout-button"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+            <div
+              class="contentLayout"
+              id="content-layout"
+            >
+              <div
+                class="sidebar"
+                id="sidebar-container"
+              >
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-actions"
+                >
+                  Actions
+                </button>
+                <button
+                  class="sidebarItem activeItem"
+                  id="sidebar-item-summary"
+                >
+                  Summary
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-activities"
+                >
+                  My Activities
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-accounts"
+                >
+                  My Accounts
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-submissions"
+                >
+                  My Submissions
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-renewals"
+                >
+                  My Renewals
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-audits"
+                >
+                  Audits
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-other-policy-transaction"
+                >
+                  Other Policy Transaction
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-queues"
+                >
+                  My Queues
+                </button>
+              </div>
+              <div
+                class="mainContent"
+                id="main-content"
+              >
+                <h1
+                  id="summary-title"
+                >
+                  My Summary
+                </h1>
+                <p
+                  id="summary-description"
+                >
+                  Welcome to your Desktop page! Here, you can view your summary.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      82 |       
+      83 |       // Hover over Account to show dropdown
+    > 84 |       const accountTab = screen.getByRole('button', { name: /account/i });
+         |                                 ^
+      85 |       fireEvent.mouseEnter(accountTab.parentElement);
+      86 |       
+      87 |       // Click New Account
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at getElementError (node_modules/@testing-library/dom/dist/query-helpers.js:20:35)
+      at getMultipleElementsFoundError (node_modules/@testing-library/dom/dist/query-helpers.js:23:10)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+      at getByRole (node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at Object.<anonymous> (src/tests/integration.test.js:84:33)
+
+  ● App Integration Tests › Component Communication › navbar communicates with desktop page correctly
+
+    TestingLibraryElementError: Found multiple elements with the role "button" and name `/submission/i`
+
+    Here are the matching elements:
+
+    Ignored nodes: comments, script, style
+    <button
+      class="navTab "
+      id="submission-button"
+    >
+      Submission
+       ▼
+    </button>
+
+    Ignored nodes: comments, script, style
+    <button
+      class="sidebarItem "
+      id="sidebar-item-my-submissions"
+    >
+      My Submissions
+    </button>
+
+    (If this is intentional, then use the `*AllBy*` variant of the query (like `queryAllByText`, `getAllByText`, or `findAllByText`)).
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div>
+          <div
+            class="desktopContainer"
+            id="desktop-container"
+          >
+            <div
+              class="topBar"
+              id="top-bar"
+            >
+              <div
+                class="appName"
+                id="app-name"
+              >
+                PolicyMaster
+              </div>
+              <div
+                class="navbar"
+                id="navbar"
+              >
+                <div
+                  class="navTabs"
+                  id="nav-tabs"
+                >
+                  <button
+                    class="navTab activeTab"
+                    id="desktop-button"
+                  >
+                    Desktop
+                  </button>
+                  <div
+                    class="dropdown"
+                    id="account-tab"
+                  >
+                    <button
+                      class="navTab "
+                      id="account-button"
+                    >
+                      Account
+                       ▼
+                    </button>
+                  </div>
+                  <div
+                    class="dropdown"
+                    id="submission-tab"
+                  >
+                    <button
+                      class="navTab "
+                      id="submission-button"
+                    >
+                      Submission
+                       ▼
+                    </button>
+                  </div>
+                  <button
+                    class="navTab "
+                    id="contact-button"
+                  >
+                    Contact
+                  </button>
+                  <button
+                    class="navTab "
+                    id="search-button"
+                  >
+                    Search
+                  </button>
+                  <button
+                    class="navTab "
+                    id="administration-button"
+                  >
+                    Administration
+                  </button>
+                </div>
+                <button
+                  class="logoutButton"
+                  id="logout-button"
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+            <div
+              class="contentLayout"
+              id="content-layout"
+            >
+              <div
+                class="sidebar"
+                id="sidebar-container"
+              >
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-actions"
+                >
+                  Actions
+                </button>
+                <button
+                  class="sidebarItem activeItem"
+                  id="sidebar-item-summary"
+                >
+                  Summary
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-activities"
+                >
+                  My Activities
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-accounts"
+                >
+                  My Accounts
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-submissions"
+                >
+                  My Submissions
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-renewals"
+                >
+                  My Renewals
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-audits"
+                >
+                  Audits
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-other-policy-transaction"
+                >
+                  Other Policy Transaction
+                </button>
+                <button
+                  class="sidebarItem "
+                  id="sidebar-item-my-queues"
+                >
+                  My Queues
+                </button>
+              </div>
+              <div
+                class="mainContent"
+                id="main-content"
+              >
+                <h1
+                  id="summary-title"
+                >
+                  My Summary
+                </h1>
+                <p
+                  id="summary-description"
+                >
+                  Welcome to your Desktop page! Here, you can view your summary.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      196 |       
+      197 |       // Test dropdown interactions
+    > 198 |       const submissionTab = screen.getByRole('button', { name: /submission/i });
+          |                                    ^
+      199 |       fireEvent.mouseEnter(submissionTab.parentElement);
+      200 |       
+      201 |       const newSubmissionButton = await screen.findByRole('button', { name: /new submission/i });
+
+      at Object.getElementError (node_modules/@testing-library/dom/dist/config.js:37:19)
+      at getElementError (node_modules/@testing-library/dom/dist/query-helpers.js:20:35)
+      at getMultipleElementsFoundError (node_modules/@testing-library/dom/dist/query-helpers.js:23:10)
+      at node_modules/@testing-library/dom/dist/query-helpers.js:55:13
+      at getByRole (node_modules/@testing-library/dom/dist/query-helpers.js:95:19)
+      at Object.<anonymous> (src/tests/integration.test.js:198:36)
+
+FAIL src/pages/Login/LoginPage.test.js
+  ● Console
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+
+      25 |
+      26 |   const renderLoginPage = () => {
+    > 27 |     return render(
+         |                  ^
+      28 |       <MemoryRouter>
+      29 |         <LoginPage />
+      30 |       </MemoryRouter>
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at logV6DeprecationWarnings (node_modules/react-router/lib/deprecations.ts:26:5)
+      at node_modules/react-router/lib/components.tsx:257:25
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderLoginPage (src/pages/Login/LoginPage.test.js:27:18)
+      at Object.<anonymous> (src/pages/Login/LoginPage.test.js:35:5)
+
+    console.warn
+      ⚠️ React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+      25 |
+      26 |   const renderLoginPage = () => {
+    > 27 |     return render(
+         |                  ^
+      28 |       <MemoryRouter>
+      29 |         <LoginPage />
+      30 |       </MemoryRouter>
+
+      at warnOnce (node_modules/react-router/lib/deprecations.ts:9:13)
+      at logDeprecation (node_modules/react-router/lib/deprecations.ts:14:3)
+      at logV6DeprecationWarnings (node_modules/react-router/lib/deprecations.ts:37:5)
+      at node_modules/react-router/lib/components.tsx:257:25
+      at Object.react_stack_bottom_frame (node_modules/react-dom/cjs/react-dom-client.development.js:25989:20)
+      at runWithFiberInDEV (node_modules/react-dom/cjs/react-dom-client.development.js:874:13)
+      at commitHookEffectListMount (node_modules/react-dom/cjs/react-dom-client.development.js:13249:29)
+      at commitHookPassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:13336:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15484:13)
+      at recursivelyTraversePassiveMountEffects (node_modules/react-dom/cjs/react-dom-client.development.js:15439:11)
+      at commitPassiveMountOnFiber (node_modules/react-dom/cjs/react-dom-client.development.js:15519:11)
+      at flushPassiveEffects (node_modules/react-dom/cjs/react-dom-client.development.js:18432:9)
+      at node_modules/react-dom/cjs/react-dom-client.development.js:17923:15
+      at flushActQueue (node_modules/react/cjs/react.development.js:590:34)
+      at Object.<anonymous>.process.env.NODE_ENV.exports.act (node_modules/react/cjs/react.development.js:884:10)
+      at node_modules/@testing-library/react/dist/act-compat.js:47:25
+      at renderRoot (node_modules/@testing-library/react/dist/pure.js:190:26)
+      at render (node_modules/@testing-library/react/dist/pure.js:292:10)
+      at renderLoginPage (src/pages/Login/LoginPage.test.js:27:18)
+      at Object.<anonymous> (src/pages/Login/LoginPage.test.js:35:5)
+
+  ● LoginPage Component › shows error message on invalid credentials
+
+    Unable to find an element with the text: /your username or password may be incorrect/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          class="loginContainer"
+        >
+          <h1
+            class="pageTitle"
+          >
+            PolicyMaster
+          </h1>
+          <div
+            class="loginFormContainer"
+          >
+            <div
+              class="loginForm"
+            >
+              <label
+                class="inputLabel"
+                for="username"
+              >
+                Username
+              </label>
+              <input
+                class="inputField"
+                id="username"
+                placeholder="Enter your username"
+                type="text"
+                value="wronguser"
+              />
+              <label
+                class="inputLabel"
+                for="password"
+              >
+                Password
+              </label>
+              <input
+                class="inputField"
+                id="password"
+                placeholder="Enter your password"
+                type="password"
+                value="wrongpass"
+              />
+              <button
+                class="submitButton"
+              >
+                Login
+              </button>
+              <button
+                class="resetPasswordLink"
+              >
+                Reset Password
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      87 |     fireEvent.click(loginButton);
+      88 |     
+    > 89 |     await waitFor(() => {
+         |                  ^
+      90 |       expect(screen.getByText(/your username or password may be incorrect/i)).toBeInTheDocument();
+      91 |     });
+      92 |     
+
+      at waitForWrapper (node_modules/@testing-library/dom/dist/wait-for.js:163:27)
+      at Object.<anonymous> (src/pages/Login/LoginPage.test.js:89:18)
+
+  ● LoginPage Component › shows error message on empty username
+
+    Unable to find an element with the text: /your username or password may be incorrect/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          class="loginContainer"
+        >
+          <h1
+            class="pageTitle"
+          >
+            PolicyMaster
+          </h1>
+          <div
+            class="loginFormContainer"
+          >
+            <div
+              class="loginForm"
+            >
+              <label
+                class="inputLabel"
+                for="username"
+              >
+                Username
+              </label>
+              <input
+                class="inputField"
+                id="username"
+                placeholder="Enter your username"
+                type="text"
+                value=""
+              />
+              <label
+                class="inputLabel"
+                for="password"
+              >
+                Password
+              </label>
+              <input
+                class="inputField"
+                id="password"
+                placeholder="Enter your password"
+                type="password"
+                value="testpass"
+              />
+              <button
+                class="submitButton"
+              >
+                Login
+              </button>
+              <button
+                class="resetPasswordLink"
+              >
+                Reset Password
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      103 |     fireEvent.click(loginButton);
+      104 |     
+    > 105 |     await waitFor(() => {
+          |                  ^
+      106 |       expect(screen.getByText(/your username or password may be incorrect/i)).toBeInTheDocument();
+      107 |     });
+      108 |   });
+
+      at waitForWrapper (node_modules/@testing-library/dom/dist/wait-for.js:163:27)
+      at Object.<anonymous> (src/pages/Login/LoginPage.test.js:105:18)
+
+  ● LoginPage Component › shows error message on empty password
+
+    Unable to find an element with the text: /your username or password may be incorrect/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          class="loginContainer"
+        >
+          <h1
+            class="pageTitle"
+          >
+            PolicyMaster
+          </h1>
+          <div
+            class="loginFormContainer"
+          >
+            <div
+              class="loginForm"
+            >
+              <label
+                class="inputLabel"
+                for="username"
+              >
+                Username
+              </label>
+              <input
+                class="inputField"
+                id="username"
+                placeholder="Enter your username"
+                type="text"
+                value="testuser"
+              />
+              <label
+                class="inputLabel"
+                for="password"
+              >
+                Password
+              </label>
+              <input
+                class="inputField"
+                id="password"
+                placeholder="Enter your password"
+                type="password"
+                value=""
+              />
+              <button
+                class="submitButton"
+              >
+                Login
+              </button>
+              <button
+                class="resetPasswordLink"
+              >
+                Reset Password
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      117 |     fireEvent.click(loginButton);
+      118 |     
+    > 119 |     await waitFor(() => {
+          |                  ^
+      120 |       expect(screen.getByText(/your username or password may be incorrect/i)).toBeInTheDocument();
+      121 |     });
+      122 |   });
+
+      at waitForWrapper (node_modules/@testing-library/dom/dist/wait-for.js:163:27)
+      at Object.<anonymous> (src/pages/Login/LoginPage.test.js:119:18)
+
+  ● LoginPage Component › clears error message when user starts typing after error
+
+    Unable to find an element with the text: /your username or password may be incorrect/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+    Ignored nodes: comments, script, style
+    <body>
+      <div>
+        <div
+          class="loginContainer"
+        >
+          <h1
+            class="pageTitle"
+          >
+            PolicyMaster
+          </h1>
+          <div
+            class="loginFormContainer"
+          >
+            <div
+              class="loginForm"
+            >
+              <label
+                class="inputLabel"
+                for="username"
+              >
+                Username
+              </label>
+              <input
+                class="inputField"
+                id="username"
+                placeholder="Enter your username"
+                type="text"
+                value="wronguser"
+              />
+              <label
+                class="inputLabel"
+                for="password"
+              >
+                Password
+              </label>
+              <input
+                class="inputField"
+                id="password"
+                placeholder="Enter your password"
+                type="password"
+                value="wrongpass"
+              />
+              <button
+                class="submitButton"
+              >
+                Login
+              </button>
+              <button
+                class="resetPasswordLink"
+              >
+                Reset Password
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </body>
+
+      143 |     fireEvent.click(loginButton);
+      144 |     
+    > 145 |     await waitFor(() => {
+          |                  ^
+      146 |       expect(screen.getByText(/your username or password may be incorrect/i)).toBeInTheDocument();
+      147 |     });
+      148 |     
+
+      at waitForWrapper (node_modules/@testing-library/dom/dist/wait-for.js:163:27)
+      at Object.<anonymous> (src/pages/Login/LoginPage.test.js:145:18)
+
+--------------------------|---------|----------|---------|---------|-------------------
+File                      | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+--------------------------|---------|----------|---------|---------|-------------------
+All files                 |   42.85 |    37.33 |   42.37 |      44 |                   
+ src                      |   15.38 |        0 |   33.33 |   15.38 |                   
+  App.js                  |     100 |      100 |     100 |     100 |                   
+  index.js                |       0 |        0 |     100 |       0 | 8-11              
+  reportWebVitals.js      |       0 |        0 |       0 |       0 | 1-8               
+ src/components/Button    |     100 |      100 |      50 |     100 |                   
+  Button.js               |     100 |      100 |      50 |     100 |                   
+ src/components/Navbar    |    91.3 |    85.71 |   81.81 |    91.3 |                   
+  Navbar.js               |    91.3 |    85.71 |   81.81 |    91.3 | 42,71             
+ src/components/Sidebar   |     100 |      100 |     100 |     100 |                   
+  Sidebar.js              |     100 |      100 |     100 |     100 |                   
+ src/components/Tab       |       0 |        0 |       0 |       0 |                   
+  Tab.js                  |       0 |        0 |       0 |       0 | 5-22              
+ src/config               |     100 |      100 |     100 |     100 |                   
+  config.js               |     100 |      100 |     100 |     100 |                   
+ src/pages/CreateAccount  |    3.22 |        0 |       0 |    3.33 |                   
+  CreateAccountPage.js    |    3.22 |        0 |       0 |    3.33 | 7-208             
+ src/pages/Desktop        |    90.9 |       80 |     100 |   90.47 |                   
+  DesktopPage.js          |    90.9 |       80 |     100 |   90.47 | 15,17             
+ src/pages/Login          |     100 |       50 |     100 |     100 |                   
+  LoginPage.js            |     100 |       50 |     100 |     100 | 47                
+ src/pages/NewSubmissions |    7.69 |        0 |       0 |    7.69 |                   
+  NewSubmissions.js       |    7.69 |        0 |       0 |    7.69 | 7-24              
+ src/pages/ResetPassword  |   39.13 |       25 |   16.66 |    40.9 |                   
+  ResetPassword.js        |   39.13 |       25 |   16.66 |    40.9 | 13-28,32,45-54    
+ src/routes               |     100 |      100 |     100 |     100 |                   
+  AppRoutes.js            |     100 |      100 |     100 |     100 |                   
+ src/utils                |       0 |        0 |       0 |       0 |                   
+  testUtils.js            |       0 |        0 |       0 |       0 | 6-95              
+--------------------------|---------|----------|---------|---------|-------------------
+Test Suites: 5 failed, 4 passed, 9 total
+Tests:       14 failed, 86 passed, 100 total
+Snapshots:   0 total
+Time:        8.547 s
+Ran all test suites.
+
+===== TEST STATUS: FAILED (exit code 1) =====
+
+===== Log file summary (size) =====
