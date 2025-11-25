@@ -159,7 +159,6 @@ jobs:
           git commit -m "Add test logs for run ${GITHUB_RUN_NUMBER}"
           git push origin ci-logs
           
-      # Replace your current cleanup step with these steps (in the same job or as a separate job)
       - name: Checkout ci-logs branch
         uses: actions/checkout@v4
         with:

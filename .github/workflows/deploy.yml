@@ -112,13 +112,77 @@ jobs:
           git commit -m "Add deploy logs for run ${GITHUB_RUN_NUMBER}"
           git push origin deploy-logs
           
-      - name: Cleanup old logs (keep last 5)
+      - name: Checkout deploy-logs branch
+        uses: actions/checkout@v4
+        with:
+            repository: ${{ github.repository }}
+            ref: deploy-logs
+            persist-credentials: true   # allows push with GITHUB_TOKEN
+            fetch-depth: 0
+            
+      - name: Cleanup old logs and push (keep last 5)
         if: always()
         shell: bash
+        env:
+            KEEP: 5
         run: |
-          cd logs/ci || exit 0
-          ls -1 | sort -n | head -n -5 | xargs -r rm -rf
+            set -euo pipefail
 
+            # go to repo root (checkout puts files here)
+            cd "${GITHUB_WORKSPACE}"
+
+            LOG_DIR="logs/ci"
+            if [ ! -d "$LOG_DIR" ]; then
+              echo "No $LOG_DIR found on this branch; nothing to delete."
+              exit 0
+            fi
+
+            cd "$LOG_DIR" || exit 0
+            
+            # nullglob so */ disappears if no dirs
+            shopt -s nullglob
+
+            # collect directories and sort numerically
+            mapfile -t dirs < <(for d in */; do printf '%s\n' "${d%/}"; done | sort -n)
+
+            total=${#dirs[@]}
+            keep=${KEEP:-5}
+
+            echo "Found $total folders; will keep last $keep by numeric name."
+
+            if (( total > keep )); then
+              remove_count=$(( total - keep ))
+              echo "Deleting $remove_count older folder(s)..."
+              for (( i=0; i<remove_count; i++ )); do
+                target="${dirs[i]}"
+                echo "Removing: $target"
+                rm -rf -- "$target"
+              done
+
+              # go back to workspace root to run git commands
+              cd "$GITHUB_WORKSPACE"
+
+              # configure git user for commit
+              git config user.name "github-actions[bot]"
+              git config user.email "github-actions[bot]@users.noreply.github.com"
+
+              # show git status for debugging
+              git status --porcelain
+
+              # stage only deletions/changes under logs/ci
+              git add -A -- "logs/ci"
+
+              # commit only if there are staged changes
+              if ! git diff --cached --quiet; then
+                git commit -m "ci: cleanup older logs - keep last $keep"
+                git push origin HEAD:ci-logs
+                echo "Pushed cleanup commit to ci-logs."
+              else
+                echo "No changes to commit after cleanup."
+              fi
+            else
+              echo "Nothing to delete (have $total <= keep $keep)."
+            fi
 
       # 3) UPLOAD ARTIFACT FOR PAGES DEPLOY 
       - name: Upload artifact
