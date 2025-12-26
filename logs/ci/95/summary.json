@@ -1,0 +1,89 @@
+{
+  "buildNumber": 95,
+  "timestamp": "2025-12-26T09:56:57.950Z",
+  "exitCode": 1,
+  "stats": {
+    "total": 100,
+    "passed": 86,
+    "failed": 14,
+    "skipped": 0,
+    "duration": "9.048 s"
+  },
+  "testSuites": {
+    "total": 9,
+    "passed": 4,
+    "failed": 5
+  },
+  "failures": [
+    {
+      "file": "src/pages/Desktop/DesktopPage.test.js",
+      "tests": [
+        {
+          "suite": "DesktopPage Component",
+          "name": "navigates to create account page when New Account is clicked",
+          "error": "TestingLibraryElementError: Found multiple elements with the role \"button\" and name `/account/i`"
+        },
+        {
+          "suite": "DesktopPage Component",
+          "name": "navigates to new submission page when New Submission is clicked",
+          "error": "TestingLibraryElementError: Found multiple elements with the role \"button\" and name `/submission/i`"
+        },
+        {
+          "suite": "DesktopPage Component",
+          "name": "handles Account tab click without dropdown action",
+          "error": "TestingLibraryElementError: Found multiple elements with the role \"button\" and name `/account/i`"
+        },
+        {
+          "suite": "DesktopPage Component",
+          "name": "handles Submission tab click without dropdown action",
+          "error": "TestingLibraryElementError: Found multiple elements with the role \"button\" and name `/submission/i`"
+        }
+      ]
+    },
+    {
+      "file": "src/routes/AppRoutes.test.js",
+      "tests": [
+        {
+          "suite": "AppRoutes Component",
+          "name": "handles navigation between routes",
+          "error": "TestingLibraryElementError: Unable to find an element by: [data-testid=\"desktop-page\"]"
+        },
+        {
+          "suite": "AppRoutes Component",
+          "name": "all route paths are case sensitive",
+          "error": "expect(element).not.toBeInTheDocument()"
+        }
+      ]
+    },
+    {
+      "file": "src/pages/Login/LoginPage.test.js",
+      "tests": [
+        {
+          "suite": "LoginPage Component",
+          "name": "shows error message on invalid credentials",
+          "error": "Unable to find an element with the text: /your username or password may be incorrect/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible."
+        },
+        {
+          "suite": "LoginPage Component",
+          "name": "shows error message on empty username",
+          "error": "Unable to find an element with the text: /your username or password may be incorrect/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible."
+        },
+        {
+          "suite": "LoginPage Component",
+          "name": "shows error message on empty password",
+          "error": "Unable to find an element with the text: /your username or password may be incorrect/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible."
+        },
+        {
+          "suite": "LoginPage Component",
+          "name": "clears error message when user starts typing after error",
+          "error": "Unable to find an element with the text: /your username or password may be incorrect/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible."
+        }
+      ]
+    }
+  ],
+  "warnings": [
+    "React Router Future Flag Warning: React Router will begin wrapping state updates in `React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_starttransition.",
+    "React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use the `v7_relativeSplatPath` future flag to opt-in early. For more information, see https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath."
+  ],
+  "logFile": "test-95-attempt1-20251226T095648Z.log"
+}
