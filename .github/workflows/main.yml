@@ -177,6 +177,32 @@ jobs:
           git commit -m "Add test logs for run ${GITHUB_RUN_NUMBER}"
           git push origin ci-logs
           
+      - name: Send test result email
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.SMTP_SERVER }}
+          server_port: ${{ secrets.SMTP_PORT }}
+          username: ${{ secrets.SMTP_USER }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: >
+            CI Test Results – Run #${{ github.run_number }} – ${{ job.status }}
+          to: ${{ secrets.MAIL_TO }}
+          from: ${{ secrets.MAIL_FROM }}
+          body: |
+            CI Test Execution Summary
+
+            Repository: ${{ github.repository }}
+            Branch: ${{ github.ref_name }}
+            Run Number: ${{ github.run_number }}
+            Status: ${{ job.status }}
+
+            Logs:
+            https://github.com/${{ github.repository }}/tree/ci-logs/logs/ci/${{ github.run_number }}
+
+            Please review and reply with APPROVE to proceed with deployment.
+
+          
 
       # 3) FAIL THE JOB IF TESTS FAILED (AFTER LOGS ARE PUSHED)
       - name: Fail job if tests failed
