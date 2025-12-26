@@ -177,6 +177,28 @@ jobs:
           git commit -m "Add test logs for run ${GITHUB_RUN_NUMBER}"
           git push origin ci-logs
           
+          
+      - name: Extract test summary for email
+        if: always()
+        shell: bash
+        run: |
+          LOG_DIR="logs/ci/${GITHUB_RUN_NUMBER}"
+          LOG_FILE=$(ls "$LOG_DIR"/test-*.log 2>/dev/null | head -n 1)
+
+          if [ -z "$LOG_FILE" ]; then
+            echo "TEST_SUMMARY=Test log not found" >> $GITHUB_ENV
+            exit 0
+          fi
+
+          SUMMARY=$(grep -E "Test Suites:|Tests:" "$LOG_FILE" | tr '\n' ' ')
+
+          if [ -z "$SUMMARY" ]; then
+            SUMMARY="Test summary not available"
+          fi
+
+          echo "TEST_SUMMARY=$SUMMARY" >> $GITHUB_ENV
+
+          
       - name: Send test result email
         if: always()
         uses: dawidd6/action-send-mail@v3
@@ -195,7 +217,9 @@ jobs:
             Repository: ${{ github.repository }}
             Branch: ${{ github.ref_name }}
             Run Number: ${{ github.run_number }}
-            Status: ${{ job.status }}
+            
+            Test Results:
+            ${{ env.TEST_SUMMARY }}
 
             Logs:
             https://github.com/${{ github.repository }}/tree/ci-logs/logs/ci/${{ github.run_number }}
