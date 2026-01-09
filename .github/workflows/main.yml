@@ -208,21 +208,27 @@ jobs:
           username: ${{ secrets.SMTP_USER }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: >
-            CI Test Results – Run #${{ github.run_number }} – ${{ job.status }}
+            Release Approval Required | Run #${{ github.run_number }} | Status: ${{ job.status }}
           to: ${{ secrets.MAIL_TO }}
           from: ${{ secrets.MAIL_FROM }}
           body: |
-            CI Test Execution Summary
+              CI Test Execution Summary
 
-            Repository: ${{ github.repository }}
-            Branch: ${{ github.ref_name }}
-            Run Number: ${{ github.run_number }}
-            
-            Test Results:
-            ${{ env.TEST_SUMMARY }}
+              Repository: ${{ github.repository }}
+              Branch: ${{ github.ref_name }}
+              Run Number: ${{ github.run_number }}
+              Job Status: ${{ job.status }}
 
-            Logs:
-            https://github.com/${{ github.repository }}/tree/ci-logs/logs/ci/${{ github.run_number }}
+              Test Results:
+              ${{ env.TEST_SUMMARY }}
+
+              Logs:
+              https://github.com/${{ github.repository }}/tree/ci-logs/logs/ci/${{ github.run_number }}
+
+  ACTION REQUIRED:
+  Reply with:
+  APPROVE DEPLOY  → to proceed with deployment
+  REJECT DEPLOY   → to stop deployment
 
             Please review and reply with APPROVE to proceed with deployment.
 
