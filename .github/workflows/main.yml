@@ -225,12 +225,12 @@ jobs:
               Logs:
               https://github.com/${{ github.repository }}/tree/ci-logs/logs/ci/${{ github.run_number }}
 
-  ACTION REQUIRED:
-  Reply with:
-  APPROVE DEPLOY  → to proceed with deployment
-  REJECT DEPLOY   → to stop deployment
+              ACTION REQUIRED:
+              Reply with:
+              APPROVE DEPLOY  → to proceed with deployment
+              REJECT DEPLOY   → to stop deployment
 
-            Please review and reply with APPROVE to proceed with deployment.
+                        Please review and reply with APPROVE to proceed with deployment.
 
           
 
