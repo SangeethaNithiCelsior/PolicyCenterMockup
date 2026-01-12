@@ -44,7 +44,7 @@ jobs:
       - name: Verify build output
         run: ls -R ./frontend/build || true
 
-      # 1) COLLECT DEPLOY LOGS FOR THIS RUN
+      # 1) COLLECT DEPLOY LOGS FOR THIS RUN 
       - name: Collect deploy logs
         shell: bash
         run: |
